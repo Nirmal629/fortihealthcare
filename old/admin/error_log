@@ -1,0 +1,201 @@
+[20-Dec-2024 17:04:36 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "dbConnection" in /home/qpof8lg3h9cm/public_html/admin/index.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/index.php on line 2
+[20-Dec-2024 17:09:42 UTC] PHP Warning:  Undefined array key "password" in /home/qpof8lg3h9cm/public_html/admin/index.php on line 20
+[20-Dec-2024 17:10:38 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '@gmail.com' at line 1 in /home/qpof8lg3h9cm/public_html/admin/index.php:13
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/index.php(13): mysqli->prepare()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/index.php on line 13
+[20-Dec-2024 17:10:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '@gmail.com' at line 1 in /home/qpof8lg3h9cm/public_html/admin/index.php:13
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/index.php(13): mysqli->prepare()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/index.php on line 13
+[20-Dec-2024 17:12:29 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '@gmail.com' at line 1 in /home/qpof8lg3h9cm/public_html/admin/index.php:13
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/index.php(13): mysqli_query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/index.php on line 13
+[20-Dec-2024 17:18:52 UTC] PHP Warning:  Undefined array key "password" in /home/qpof8lg3h9cm/public_html/admin/index.php on line 21
+[20-Dec-2024 17:20:53 UTC] PHP Warning:  Undefined array key "password" in /home/qpof8lg3h9cm/public_html/admin/index.php on line 18
+[20-Dec-2024 17:21:58 UTC] PHP Warning:  Undefined array key "password" in /home/qpof8lg3h9cm/public_html/admin/index.php on line 18
+[20-Dec-2024 17:26:00 UTC] PHP Warning:  Undefined array key "password" in /home/qpof8lg3h9cm/public_html/admin/index.php on line 18
+[30-Dec-2024 18:03:07 UTC] PHP Warning:  Undefined variable $conn in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 60
+[30-Dec-2024 18:03:07 UTC] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home/qpof8lg3h9cm/public_html/admin/manage_user.php:60
+Stack trace:
+#0 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 60
+[30-Dec-2024 18:04:06 UTC] PHP Warning:  Undefined array key "id" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 82
+[30-Dec-2024 18:04:06 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 82
+[30-Dec-2024 18:04:06 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:04:26 UTC] PHP Warning:  Undefined array key "id" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 82
+[30-Dec-2024 18:04:26 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 82
+[30-Dec-2024 18:04:26 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:06:05 UTC] PHP Warning:  Undefined array key "id" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:06:05 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:06:05 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 84
+[30-Dec-2024 18:11:27 UTC] PHP Warning:  Undefined array key "id" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:11:27 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:11:27 UTC] PHP Warning:  Undefined array key "id" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:11:27 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:11:27 UTC] PHP Warning:  Undefined array key "login_status" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 84
+[30-Dec-2024 18:13:01 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:13:01 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:13:01 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 84
+[30-Dec-2024 18:14:03 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 83
+[30-Dec-2024 18:14:03 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 85
+[30-Dec-2024 18:14:03 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 85
+[30-Dec-2024 18:14:03 UTC] PHP Warning:  Undefined array key "LOGIN_STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_user.php on line 86
+[04-Jan-2025 14:10:43 UTC] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 61
+[04-Jan-2025 14:10:43 UTC] PHP Warning:  include(): Failed opening 'db_connection.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 61
+[04-Jan-2025 14:10:43 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/qpof8lg3h9cm/public_html/admin/edit_user.php:67
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/edit_user.php(67): mysqli->prepare()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 67
+[04-Jan-2025 14:11:25 UTC] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 61
+[04-Jan-2025 14:11:25 UTC] PHP Warning:  include(): Failed opening 'db_connection.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 61
+[04-Jan-2025 14:11:25 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/qpof8lg3h9cm/public_html/admin/edit_user.php:67
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/edit_user.php(67): mysqli->prepare()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 67
+[04-Jan-2025 14:13:16 UTC] PHP Warning:  include(db_connection.php): Failed to open stream: No such file or directory in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 61
+[04-Jan-2025 14:13:16 UTC] PHP Warning:  include(): Failed opening 'db_connection.php' for inclusion (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 61
+[04-Jan-2025 14:13:16 UTC] PHP Fatal error:  Uncaught Error: mysqli object is already closed in /home/qpof8lg3h9cm/public_html/admin/edit_user.php:67
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/edit_user.php(67): mysqli->prepare()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 67
+[04-Jan-2025 14:14:06 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 155
+[04-Jan-2025 14:14:06 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 155
+[04-Jan-2025 14:16:12 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 155
+[04-Jan-2025 14:16:12 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 155
+[04-Jan-2025 14:17:33 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 155
+[04-Jan-2025 14:20:58 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:22:24 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:23:45 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:23:54 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:24:25 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:27:41 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:27:58 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[04-Jan-2025 14:28:32 UTC] PHP Warning:  Undefined array key "TIMnEZONE_OFFSET" in /home/qpof8lg3h9cm/public_html/admin/edit_user.php on line 157
+[16-Feb-2025 12:32:32 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 's attention without disrupting gameplay. ')' at line 1 in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:8
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(8): mysqli_query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 8
+[16-Feb-2025 12:33:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 's attention without disrupting gameplay. ')' at line 1 in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:8
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(8): mysqli_query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 8
+[16-Feb-2025 12:33:26 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 's attention without disrupting gameplay. ')' at line 1 in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:8
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(8): mysqli_query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 8
+[16-Feb-2025 12:39:57 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 's attention without disrupting gameplay.')' at line 1 in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:8
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(8): mysqli_query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 8
+[16-Feb-2025 12:40:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 's attention without disrupting gameplay.')' at line 1 in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:9
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(9): mysqli_query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 9
+[16-Feb-2025 12:41:25 UTC] PHP Fatal error:  Uncaught ArgumentCountError: mysqli_real_escape_string() expects exactly 2 arguments, 1 given in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:9
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(9): mysqli_real_escape_string()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 9
+[16-Feb-2025 12:41:47 UTC] PHP Fatal error:  Uncaught ArgumentCountError: mysqli_real_escape_string() expects exactly 2 arguments, 1 given in /home/qpof8lg3h9cm/public_html/admin/add_ads.php:9
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/add_ads.php(9): mysqli_real_escape_string()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/add_ads.php on line 9
+[02-Mar-2025 16:09:58 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[02-Mar-2025 16:11:05 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[02-Apr-2025 00:52:05 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[07-Apr-2025 13:47:40 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[07-Apr-2025 23:26:55 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[08-Apr-2025 18:50:44 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[15-Apr-2025 13:33:55 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[08-May-2025 00:46:29 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[11-May-2025 12:19:44 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[24-May-2025 13:32:57 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/admin/index.php on line 23
+[15-Jun-2025 02:30:23 America/Toronto] PHP Warning:  move_uploaded_file(uploads/badminton3.jpg): Failed to open stream: No such file or directory in /home/qpof8lg3h9cm/public_html/admin/add_product.php on line 16
+[15-Jun-2025 02:30:23 America/Toronto] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpvLvd04&quot; to &quot;uploads/badminton3.jpg&quot; in /home/qpof8lg3h9cm/public_html/admin/add_product.php on line 16
+[15-Jun-2025 02:35:06 America/Toronto] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'casa_db.products' doesn't exist in /home/qpof8lg3h9cm/public_html/admin/manage_products.php:44
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/manage_products.php(44): mysqli->query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/manage_products.php on line 44
+[15-Jun-2025 05:34:45 America/Toronto] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ID' in 'ORDER BY' in /home/qpof8lg3h9cm/public_html/admin/manage_order.php:57
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/manage_order.php(57): mysqli->query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 57
+[15-Jun-2025 05:35:27 America/Toronto] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'ID' in 'ORDER BY' in /home/qpof8lg3h9cm/public_html/admin/manage_order.php:57
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/manage_order.php(57): mysqli->query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 57
+[15-Jun-2025 05:36:50 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 83
+[15-Jun-2025 05:36:50 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 84
+[15-Jun-2025 05:36:50 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 85
+[15-Jun-2025 05:37:11 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 83
+[15-Jun-2025 05:37:11 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 84
+[15-Jun-2025 05:37:11 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 85
+[15-Jun-2025 05:37:14 America/Toronto] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'STATUS' in 'SET' in /home/qpof8lg3h9cm/public_html/admin/manage_order.php:12
+Stack trace:
+#0 /home/qpof8lg3h9cm/public_html/admin/manage_order.php(12): mysqli->query()
+#1 {main}
+  thrown in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 12
+[15-Jun-2025 05:37:20 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 83
+[15-Jun-2025 05:37:20 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 84
+[15-Jun-2025 05:37:20 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 85
+[15-Jun-2025 05:37:47 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 83
+[15-Jun-2025 05:37:47 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 84
+[15-Jun-2025 05:37:47 America/Toronto] PHP Warning:  Undefined array key "STATUS" in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 85
+[15-Jun-2025 05:39:23 America/Toronto] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/qpof8lg3h9cm/public_html/admin/sidebar.php:1) in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 13
+[15-Jun-2025 05:39:57 America/Toronto] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/qpof8lg3h9cm/public_html/admin/sidebar.php:1) in /home/qpof8lg3h9cm/public_html/admin/manage_order.php on line 13
+[24-Jun-2025 13:52:56 America/Toronto] PHP Warning:  Constant DATABASE_NAME already defined in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/dbConnection.php on line 3
+[24-Jun-2025 13:52:56 America/Toronto] PHP Warning:  Constant USERNAME already defined in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/dbConnection.php on line 4
+[24-Jun-2025 13:52:56 America/Toronto] PHP Warning:  Constant PASSWORD already defined in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/dbConnection.php on line 5
+[24-Jun-2025 13:52:56 America/Toronto] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/header.php on line 2
+[24-Jun-2025 13:53:46 America/Toronto] PHP Warning:  Constant DATABASE_NAME already defined in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/dbConnection.php on line 3
+[24-Jun-2025 13:53:46 America/Toronto] PHP Warning:  Constant USERNAME already defined in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/dbConnection.php on line 4
+[24-Jun-2025 13:53:46 America/Toronto] PHP Warning:  Constant PASSWORD already defined in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/dbConnection.php on line 5
+[24-Jun-2025 13:53:46 America/Toronto] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/header.php on line 2
+[24-Jun-2025 14:36:12 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/index.php on line 23
+[24-Jun-2025 14:37:03 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/index.php on line 23
+[24-Jun-2025 14:37:09 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/index.php on line 23
+[24-Jun-2025 14:37:43 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/index.php on line 23
+[25-Jun-2025 22:54:55 America/Toronto] PHP Warning:  move_uploaded_file(uploads/products/1750906495_pharma.jpg): Failed to open stream: No such file or directory in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/edit_products.php on line 31
+[25-Jun-2025 22:54:55 America/Toronto] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpPvg5Sf&quot; to &quot;uploads/products/1750906495_pharma.jpg&quot; in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/edit_products.php on line 31
+[25-Jun-2025 22:55:23 America/Toronto] PHP Warning:  move_uploaded_file(uploads/products/1750906523_pharma.jpg): Failed to open stream: No such file or directory in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/edit_products.php on line 31
+[25-Jun-2025 22:55:23 America/Toronto] PHP Warning:  move_uploaded_file(): Unable to move &quot;/tmp/phpjnVNVX&quot; to &quot;uploads/products/1750906523_pharma.jpg&quot; in /home/qpof8lg3h9cm/public_html/Pharma-Project/admin/edit_products.php on line 31
+[15-Apr-2026 09:15:45 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:15:51 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:16:27 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:16:34 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:17:20 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:17:26 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:18:10 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:18:17 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:19:00 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:19:07 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:19:52 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:19:58 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:20:43 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:20:49 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:21:33 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:21:40 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:22:25 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:22:32 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:23:15 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
+[15-Apr-2026 09:23:21 America/Toronto] PHP Warning:  Trying to access array offset on value of type null in /home/qpof8lg3h9cm/public_html/fortierhealthcarepvtltd.com/admin/index.php on line 23
