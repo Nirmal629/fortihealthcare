@@ -6,8 +6,9 @@
 /storage/*.key
 /storage/pail
 /vendor
-/old
-/old/error_log
+old/error_log
+*.log
+old/
 storage
 stubs
 .env
