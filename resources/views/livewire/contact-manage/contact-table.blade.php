@@ -23,6 +23,10 @@
               'displayName' => 'Email',
           ])
           @include('livewire.includes.datatable-header-sort', [
+              'colName' => 'phone',
+              'displayName' => 'Phone',
+          ])
+          @include('livewire.includes.datatable-header-sort', [
               'colName' => 'created_at',
               'displayName' => 'Created At',
           ])
@@ -53,6 +57,7 @@
               </td>
               <td class=""> {{ $contact->name }}</td>
               <td class=""> {{ $contact->email }}</td>
+              <td class=""> {{ $contact->phone ?? '-' }}</td>
               <td>{{ convertDateTimeHours($contact->created_at) }}</td>
             </tr>
           @endforeach
@@ -81,6 +86,7 @@
                     <div id="contactDetailsContent">
                         <p><strong>Name:</strong> <span id="contactName"></span></p>
                         <p><strong>Email:</strong> <span id="contactEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="contactPhone"></span></p>
                         <p><strong>Message:</strong> <span id="contactMessage"></span></p>
                         <p><strong>Submitted On:</strong> <span id="contactSubmittedOn"></span></p>
 
@@ -115,6 +121,7 @@
           if (response.success) {
             $('#contactName').text(response.data.name);
             $('#contactEmail').text(response.data.email);
+            $('#contactPhone').text(response.data.phone || 'N/A');
             $('#contactMessage').text(response.data.message || 'No message provided');
             $('#contactSubmittedOn').text(response.data.created_at);
           } else {

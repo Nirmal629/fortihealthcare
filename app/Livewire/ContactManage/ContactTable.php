@@ -19,6 +19,7 @@ class ContactTable extends BaseComponent
     'first_name'          => 'First Name',
     'last_name'           => 'Last Name',
     'email'               => 'Email',
+    'phone'               => 'Phone',
     'created_at'          => 'Added On',
   ];
 

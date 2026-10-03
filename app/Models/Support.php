@@ -13,6 +13,7 @@ class Support extends Model
   protected $fillable = [
     'first_name',
     'last_name',
+    'phone',
     'email',
     'message',
   ];
@@ -22,8 +23,9 @@ class Support extends Model
     if (!$search) return;
 
     $query->where(function ($q) use ($search) {
-      $q->whereRaw("CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, '')) LIKE '%$search%'");
-      $q->orWhere('email', 'like', "%$search%");
+      $q->whereRaw("CONCAT(COALESCE(first_name, ''), ' ', COALESCE(last_name, '')) LIKE '%$search%'")
+        ->orWhere('email', 'like', "%$search%")
+        ->orWhere('phone', 'like', "%$search%");
     });
   }
   public static function remove(int $id = 0): JsonResponse

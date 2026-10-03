@@ -76,8 +76,8 @@ Route::prefix('cart')->name('cart.')->controller(CartController::class)->group(f
 Route::post('/check-pincode', [LocationController::class, 'checkPincode'])->name('pincode.check');
 Route::post('/set-location', [LocationController::class, 'set'])->name('location.set')->middleware('throttle:3,1');
 Route::get('/blogs', [BlogController::class, 'index'])->name('blogs');
-Route::get('/blog/{slug}', [BlogController::class, 'blogDetails'])->name('blog.details');
 Route::post('/conatct-us/save', [ContactUsController::class, 'saveContactInformation'])->name('contact-us.store');
+Route::post('/contact-us/save', [ContactUsController::class, 'saveContactInformation']);
 
 Route::get('/stores', [StoreController::class, 'index'])->name('stores');
 Route::get('/stores/search', [StoreController::class, 'search'])->name('stores.search');

@@ -33,7 +33,7 @@
                         <h4 class="font45 fw-normal mb-0 c--whitec">
                           {{-- {!! $settings['content'] ?? '' !!} --}}
                         </h4>
-                        <a href="{{ $settings['hyper_link'] ?? '#' }}" class="btn btn-light px-5 py-2">
+                        <a href="{{ $settings['hyper_link'] ?? '#' }}" class="btn custom-submit-btn learnmore_btn">
                           {{ $settings['btn_text'] ?? 'Explore Products' }}
                         </a>
                       </div>
@@ -68,7 +68,7 @@
                       <h4 class="font45 fw-normal mb-0 c--whitec">
                         {{-- Welcome to Our Mayuri Space – Experience Elegance --}}
                       </h4>
-                      <a href="#" class="btn btn-light px-5 py-2">
+                      <a href="#" class="btn custom-submit-btn learnmore_btn">
                         Explore Products
                       </a>
                     </div>
@@ -101,7 +101,7 @@
                       <h4 class="font45 fw-normal mb-0 c--whitec">
                         {{-- Welcome to Our Mayuri Space – Experience Elegance --}}
                       </h4>
-                      <a href="#" class="btn btn-light px-5 py-2">
+                      <a href="#" class="btn custom-submit-btn learnmore_btn">
                         Explore Products
                       </a>
                     </div>

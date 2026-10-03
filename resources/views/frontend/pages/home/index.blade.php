@@ -111,7 +111,8 @@
 <style>
   /* Global Home Page Button Styles */
   main .btn,
-  .living__home-hero--media .txt-wrp .btn-light {
+  .living__home-hero--media .txt-wrp .btn-light,
+  .living__home-hero--media .txt-wrp .custom-submit-btn {
     background-color: #f0b334 !important;
     color: #ffffff !important;
     position: relative;
@@ -123,7 +124,8 @@
   }
 
   main .btn::before,
-  .living__home-hero--media .txt-wrp .btn-light::before {
+  .living__home-hero--media .txt-wrp .btn-light::before,
+  .living__home-hero--media .txt-wrp .custom-submit-btn::before {
     content: "";
     background-color: #ffffff;
     position: absolute;
@@ -137,12 +139,14 @@
   }
 
   main .btn:hover::before,
-  .living__home-hero--media .txt-wrp .btn-light:hover::before {
+  .living__home-hero--media .txt-wrp .btn-light:hover::before,
+  .living__home-hero--media .txt-wrp .custom-submit-btn:hover::before {
     transform: skewX(-45deg) scale(1, 1);
   }
 
   main .btn:hover,
-  .living__home-hero--media .txt-wrp .btn-light:hover {
+  .living__home-hero--media .txt-wrp .btn-light:hover,
+  .living__home-hero--media .txt-wrp .custom-submit-btn:hover {
     color: #f0b334 !important;
     border-color: #f0b334 !important;
   }

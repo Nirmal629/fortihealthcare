@@ -12,9 +12,8 @@ class ContactUsController extends Controller
 {
   public function saveContactInformation(ContactUsRequest $request)
   {
-
     $key = 'contact-us:' . $request->ip();
-    if (RateLimiter::tooManyAttempts($key, 3)) {
+    if (RateLimiter::tooManyAttempts($key, 5)) {
       return response()->json([
         'success' => false,
         'message' => 'Too many attempts. Please try again later.'
@@ -24,12 +23,25 @@ class ContactUsController extends Controller
     RateLimiter::hit($key, 60);
 
     $validated = $request->validated();
-    $name = $validated['first_name'] . ($validated['last_name'] ? ' ' . $validated['last_name'] : '');
+
+    if (!empty($validated['first_name'])) {
+      $firstName = $validated['first_name'];
+      $lastName = $validated['last_name'] ?? null;
+      $name = trim($firstName . ' ' . $lastName);
+    } else {
+      $name = $validated['name'] ?? '';
+      $parts = explode(' ', trim($name), 2);
+      $firstName = $parts[0] ?? '';
+      $lastName = $parts[1] ?? null;
+    }
+
+    $phone = $validated['phone'] ?? null;
     $sanitizedMessage = strip_tags($validated['message']);
 
     Support::create([
-      'first_name' => $validated['first_name'],
-      'last_name'  => $validated['last_name'],
+      'first_name' => $firstName,
+      'last_name'  => $lastName,
+      'phone'      => $phone,
       'email'      => $validated['email'],
       'message'    => $sanitizedMessage,
     ]);
@@ -38,17 +50,25 @@ class ContactUsController extends Controller
     $data = [
       'name'    => $name,
       'email'   => $validated['email'],
+      'phone'   => $phone,
       'message' => $sanitizedMessage,
     ];
 
-    app('EmailService')->sendEmail(
-      $validated['email'],
-      'Thank You for Contacting Us!',
-      'emails.frontend.contact-submission',
-      ['data' => $data],
-      [],
-      adminMailsByRoleID([SiteSetting::where('key', 'order_copy_to_id')->value('value') ?? 1])
-    );
+    try {
+      if (app()->bound('EmailService')) {
+        $adminEmails = adminMailsByRoleID([SiteSetting::where('key', 'order_copy_to_id')->value('value') ?? 1]);
+        app('EmailService')->sendEmail(
+          $validated['email'],
+          'Thank You for Contacting Us!',
+          'emails.frontend.contact-submission',
+          ['data' => $data],
+          [],
+          $adminEmails
+        );
+      }
+    } catch (\Exception $e) {
+      \Illuminate\Support\Facades\Log::warning('Contact email sending error: ' . $e->getMessage());
+    }
 
     return response()->json([
       'success' => true,

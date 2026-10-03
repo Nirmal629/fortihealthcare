@@ -41,8 +41,9 @@ class ContactController extends Controller
       return response()->json([
         'success' => true,
         'data' => [
-          'name'       => $contact->first_name . ' ' . $contact->last_name,
+          'name'       => trim($contact->first_name . ' ' . $contact->last_name),
           'email'      => $contact->email,
+          'phone'      => $contact->phone ?? 'N/A',
           'message'    => $contact->message,
           'created_at' => convertDate($contact->created_at),
         ]
