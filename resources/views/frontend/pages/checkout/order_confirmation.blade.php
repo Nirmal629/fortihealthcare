@@ -56,7 +56,7 @@
         </div>
         <div class="head">
           <h1 class="fw-normal mt-0 font45 c--blackc">Your order has been received!</h1>
-          <p class="fw-normal m-0 font18 c--blackc">Thank you for your purchase! Your furniture order Order ID: <span
+          <p class="fw-normal m-0 font18 c--blackc">Thank you for your purchase! Your Medicine order Order ID: <span
               class="c--primary">#{{ $order->order_number }}</span> is <br>confirmed. We'll update you shortly with
             packing and shipping details. </p>
           <div class="btnwrap">

@@ -13,7 +13,7 @@ class AddressResource extends JsonResource
    *
    * @return array<string, mixed>
    */
-  public function toArray(Request $request): array
+  public function toArray(Request $request = null): array
   {
     if (!$this->resource) {
       return []; // Return empty array if no address

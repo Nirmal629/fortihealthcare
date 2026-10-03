@@ -14,7 +14,7 @@
 
   @forelse ($defaultAddresses as $address)
     @php
-      $addressData = array_merge($address->toArray(), [
+      $addressData = array_merge($address->toArray(request()), [
         'encoded_state_id' => Hashids::encode($address->state_id),
         'pincode' => $address->pin,
         'address_line_1' => $address->address_1,
@@ -99,7 +99,7 @@
     <div class="modern_address_grid">
       @foreach ($otherAddresses as $address)
         @php
-          $addressData = array_merge($address->toArray(), [
+          $addressData = array_merge($address->toArray(request()), [
             'encoded_state_id' => Hashids::encode($address->state_id),
             'pincode' => $address->pin,
             'address_line_1' => $address->address_1,

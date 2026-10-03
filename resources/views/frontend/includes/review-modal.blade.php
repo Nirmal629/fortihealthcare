@@ -63,8 +63,8 @@
             </div>
 
             <div class="action d-flex justify-content-end align-items-center gap-3">
-              <button type="button" class="btn btn-outline-dark w-50 py-3" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-dark w-50 py-3">Submit</button>
+              <button type="button" class="btn modal-cancel-btn w-50" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn modal-submit-btn w-50">Submit Review</button>
             </div>
           </form>
         </div>

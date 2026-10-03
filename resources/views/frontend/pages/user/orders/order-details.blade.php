@@ -6,6 +6,82 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
+
+    /* Theme-Based Order Details Page Styles */
+    .profile_order_return_box {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e9ecef !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+    }
+    .order_status_wrap {
+      background: #fafafa;
+      padding: 18px 24px;
+    }
+    .status_wrap .icon.active {
+      background-color: #f0b334 !important;
+      color: #ffffff !important;
+    }
+    .track_card.active .icon {
+      background-color: #f0b334 !important;
+    }
+    .track_card.active h4 {
+      color: #f0b334 !important;
+      font-weight: 600;
+    }
+    .order-action-btn,
+    .download .custom-submit-btn {
+      background-color: #f0b334 !important;
+      color: #ffffff !important;
+      border-radius: 0 !important;
+      padding: 10px 50px 10px 20px !important;
+      font-size: 15px !important;
+      position: relative;
+      border: 1px solid transparent !important;
+      transition: all 0.5s !important;
+      z-index: 1;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none !important;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .order-action-btn::after,
+    .download .custom-submit-btn::after {
+      content: 'download';
+      font-family: 'Material Symbols Outlined';
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-weight: 400;
+      font-size: 18px;
+    }
+    .order-action-btn::before,
+    .download .custom-submit-btn::before {
+      content: "";
+      background-color: #ffffff;
+      position: absolute;
+      z-index: -1;
+      left: -20%;
+      right: -20%;
+      top: 0;
+      bottom: 0;
+      transform: skewX(-45deg) scale(0, 1);
+      transition: all 0.5s;
+    }
+    .order-action-btn:hover::before,
+    .download .custom-submit-btn:hover::before {
+      transform: skewX(-45deg) scale(1, 1);
+    }
+    .order-action-btn:hover,
+    .download .custom-submit-btn:hover {
+      color: #f0b334 !important;
+      border-color: #f0b334 !important;
+    }
   </style>
 @endpush
 @section('title', @$title)
@@ -257,8 +333,8 @@
 
                       <div class="download">
                         <a href="{{ route('order-invoice.download', Hashids::encode($order['id'])) }}"
-                          class="btn btn-outline-dark px-3 py-3 d-flex justify-content-center font18 align-items-center gap-2"
-                          title="Download Invoice"><span class="material-symbols-outlined font20">receipt_long</span>
+                          class="btn custom-submit-btn learnmore_btn order-action-btn"
+                          title="Download Invoice">
                           Download Invoice</a>
                       </div>
                     </div>

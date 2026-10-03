@@ -6,6 +6,129 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
+
+    /* Theme-Based Order Page Styles */
+    .profile_order_return_box {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e9ecef !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .profile_order_return_box:hover {
+      box-shadow: 0 6px 20px rgba(240, 179, 52, 0.12);
+      border-color: #f0b334 !important;
+    }
+    .order_status_wrap {
+      background: #fafafa;
+      padding: 18px 24px;
+    }
+    .status_wrap .icon.active {
+      background-color: #f0b334 !important;
+      color: #ffffff !important;
+    }
+    .viewdetails a {
+      color: #f0b334;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.3s ease;
+    }
+    .viewdetails a:hover {
+      color: #d6981e;
+      transform: translateX(3px);
+    }
+    .order-action-btn,
+    .exchange .custom-submit-btn {
+      background-color: #f0b334 !important;
+      color: #ffffff !important;
+      border-radius: 0 !important;
+      padding: 10px 50px 10px 20px !important;
+      font-size: 15px !important;
+      position: relative;
+      border: 1px solid transparent !important;
+      transition: all 0.5s !important;
+      z-index: 1;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none !important;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .order-action-btn::after,
+    .exchange .custom-submit-btn::after {
+      content: 'arrow_forward';
+      font-family: 'Material Symbols Outlined';
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      font-weight: 400;
+      font-size: 18px;
+    }
+    .order-action-btn::before,
+    .exchange .custom-submit-btn::before {
+      content: "";
+      background-color: #ffffff;
+      position: absolute;
+      z-index: -1;
+      left: -20%;
+      right: -20%;
+      top: 0;
+      bottom: 0;
+      transform: skewX(-45deg) scale(0, 1);
+      transition: all 0.5s;
+    }
+    .order-action-btn:hover::before,
+    .exchange .custom-submit-btn:hover::before {
+      transform: skewX(-45deg) scale(1, 1);
+    }
+    .order-action-btn:hover,
+    .exchange .custom-submit-btn:hover {
+      color: #f0b334 !important;
+      border-color: #f0b334 !important;
+    }
+    .modal-submit-btn {
+      background-color: #f0b334 !important;
+      color: #ffffff !important;
+      border: 1px solid transparent !important;
+      font-weight: 500;
+      padding: 10px 20px !important;
+      transition: all 0.3s ease;
+    }
+    .modal-submit-btn:hover {
+      background-color: #d6981e !important;
+      color: #ffffff !important;
+    }
+    .modal-cancel-btn {
+      border: 1px solid #ced4da !important;
+      color: #6c757d !important;
+      font-weight: 500;
+      padding: 10px 20px !important;
+      transition: all 0.3s ease;
+    }
+    .modal-cancel-btn:hover {
+      background-color: #f8f9fa !important;
+      color: #333333 !important;
+    }
+    .empty-orders-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      border: 1px dashed #ced4da;
+    }
+    .empty-orders-card .empty-icon {
+      font-size: 64px;
+      color: #f0b334;
+      margin-bottom: 16px;
+    }
   </style>
 @endpush
 @section('title', @$title)
@@ -14,16 +137,19 @@
   <section class="breadcrumb-wrapper py-4 border-top">
     <div class="container-xxl">
       <ul class="breadcrumbs">
-        <li><a href="javascript:void();">Home</a></li>
+        <li><a href="{{ route('home') }}">Home</a></li>
         <li>Account</li>
       </ul>
     </div>
   </section>
-  <section class="furniture_myaccount_wrap pt-4">
+  <section class="furniture_myaccount_wrap pt-2 pb-5">
     <div class="container flow-rootX3">
-      <div class="row">
+      <div class="row mb-4">
         <div class="col-lg-12">
-          <h1 class="fw-normal mt-0 font45 c--blackc">Account</h1>
+          <div class="account-page-header">
+            <h1 class="fw-bold m-0 font32 text-dark">My Orders</h1>
+            <p class="text-muted m-0 font14 mt-1">Track, view and manage your order history</p>
+          </div>
         </div>
       </div>
 
@@ -33,14 +159,13 @@
             @include('frontend.pages.user.includes.profile-sidebar')
             <div class="right_content">
               <div class="profile_details overflow-hidden border flow-rootX3 h-100">
-                <div class="heading border-bottom pb-4">
-                  <h2 class="font25 fw-medium m-0 c--blackc">All Orders</h2>
+                <div class="heading border-bottom pb-3 px-4 pt-3">
+                  <h2 class="font22 fw-bold m-0 c--blackc">All Orders</h2>
                 </div>
-                <div class="info flow-rootX2">
+                <div class="info flow-rootX2 p-4">
                   @forelse ($orders as $order)
                     @php
-                      // $user = $order->user;
-                      $statuses = getStatusesLog(); // ['1' => 'Confirmed', '2' => 'Cancellation Initiated', ...]
+                      $statuses = getStatusesLog();
                       $statusIcons = [
                           1 => 'check', // Confirmed
                           2 => 'sync_problem', // Cancellation Initiated
@@ -48,47 +173,49 @@
                           4 => 'local_shipping', // Shipped
                           5 => 'house', // Delivered
                       ];
-                      $currentStatus = $order['order_status']; // or $order->order_status if Eloquent model
+                      $currentStatus = $order['order_status'];
                       $returnType = $order->order_status > 4 ? 'Return' : 'Cancel';
                     @endphp
                     <div class="profile_order_return_box border">
-                      <div class="order_status_wrap pb-4 border-bottom">
-                        <div class="status_wrap">
-                          <div class="icon active"><span
-                              class="material-symbols-outlined font22">{{ $statusIcons[$currentStatus] ?? 'help_outline' }}</span>
+                      <div class="order_status_wrap pb-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div class="status_wrap d-flex align-items-center gap-3">
+                          <div class="icon active rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
+                            <span class="material-symbols-outlined font22">{{ $statusIcons[$currentStatus] ?? 'help_outline' }}</span>
                           </div>
-                          <div class="txts flow-rootx2">
+                          <div class="txts">
                             <div class="txt">
-                              <h4 class="font20 mb-0 fw-normal c--blackc">
-                                {{ $statuses[$currentStatus] ?? 'Unknown Status' }}</h4>
-                              <div class="date font14 c--gry">on
-                                {{ \Carbon\Carbon::parse($order['updated_at'])->format('D, j M Y') }}</div>
-                              <div class="date font14 c--gry">{{ '#' . $order['order_number'] }}</div>
-                              <div class="date font14 c--gry">{{ displayPrice($order['net_total']) }}</div>
+                              <h4 class="font18 mb-1 fw-bold c--blackc">
+                                {{ $statuses[$currentStatus] ?? 'Unknown Status' }}
+                              </h4>
+                              <div class="date font13 text-muted">
+                                Placed on {{ \Carbon\Carbon::parse($order['created_at'])->format('D, j M Y') }} &bull; 
+                                <span class="fw-medium text-dark">{{ '#' . $order['order_number'] }}</span> &bull; 
+                                <span class="fw-bold text-dark">{{ displayPrice($order['net_total']) }}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div class="viewdetails"><a href="{{ route('order.details', $order['order_number']) }}"
-                            title="View Details" class="font18">
-                            View Details
-                          </a></div>
-
-
+                        <div class="viewdetails">
+                          <a href="{{ route('order.details', $order['order_number']) }}"
+                            title="View Details" class="font15">
+                            View Details <span class="material-symbols-outlined font18">arrow_forward</span>
+                          </a>
+                        </div>
                       </div>
+                      
                       @foreach ($order->orderProducts as $item)
                         @php
                           $defaultImage = $item->variant->images[0]->gallery->file_name ?? null;
-                          //pd($item);
                         @endphp
-                        <div class="product_details py-4">
+                        <div class="product_details py-4 px-4">
                           <a href="{{ route('product.show', $item->variant->sku) }}"
                             title="{{ $item->variant->name }}"></a>
-                          <figure class="ratio ratio-1000x1000 mb-0"><img
+                          <figure class="ratio ratio-1000x1000 mb-0" style="max-width: 100px; border-radius: 8px; overflow: hidden;"><img
                               src="{{ $defaultImage ? asset('public/uploads/media/products/images/' . $defaultImage) : asset('public/backend/assetss/images/products/product_thumb.jpg') }}"
-                              alt="Mayuri" title="Mayuri" /></figure>
-                          <div class="details">
-                            <h3 class="font35 fw-normal c--blackc mb-2">{{ $item->variant->name }}</h3>
-                            {{-- <p class="font20 fw-normal c--blackc mb-0">Unit Selected :{{ $item->quantity ?? 0 }}</p> --}}
+                              alt="{{ $item->variant->name }}" title="{{ $item->variant->name }}" /></figure>
+                          <div class="details ps-3">
+                            <h3 class="font22 fw-normal c--blackc mb-2">{{ $item->variant->name }}</h3>
+                            <p class="font14 text-muted mb-0">Qty: {{ $item->quantity ?? 1 }} &bull; Price: {{ displayPrice($item->sell_price) }}</p>
                           </div>
                         </div>
                         @include('frontend.includes.review-items', [
@@ -101,9 +228,11 @@
                                 : asset('public/backend/assetss/images/products/product_thumb.jpg'),
                         ])
                       @endforeach
+
                       @if ($order->order_status != 3)
-                        <div class="exchange border-top border-bottom py-4">
-                          <a class="btn btn-dark btn-lg px-4 py-2" href="javascript:void();"
+                        <div class="exchange border-top py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2 bg-light-subtle">
+                          <span class="font14 text-muted">Need to modify or cancel this order?</span>
+                          <a class="btn custom-submit-btn learnmore_btn order-action-btn" href="javascript:void(0);"
                             title="{{ $returnType }} Order"
                             onclick="needHelp('{{ Hashids::encode($order->id) }}', '{{ $returnType }}')">
                             {{ $returnType }} Order
@@ -113,7 +242,14 @@
 
                     </div>
                   @empty
-                    <h5>No Order Found !!</h5>
+                    <div class="empty-orders-card">
+                      <span class="material-symbols-outlined empty-icon">receipt_long</span>
+                      <h4 class="font22 fw-bold text-dark mb-2">No Orders Found</h4>
+                      <p class="text-muted font14 mb-4">You have not placed any orders yet. Start shopping and explore our collections!</p>
+                      <a href="{{ route('home') }}" class="btn custom-submit-btn learnmore_btn">
+                        Start Shopping
+                      </a>
+                    </div>
                   @endforelse
                 </div>
               </div>
@@ -124,7 +260,6 @@
     </div>
   </section>
 
-
   @include('frontend.includes.review-modal')
 
   {{-- Help Modal --}}
@@ -132,35 +267,31 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title font24 fw-normal"><span id="help_title"></span> Order</h5>
+          <h5 class="modal-title font22 fw-bold"><span id="help_title"></span> Order</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body flow-rootX2">
-          <div class="border-top"></div>
           <div id="newHelp">
             <form id="helpForm">
               @csrf
-              <div class="form-element form-textarea mb-4 mt-4">
-                <label class="form-label">Please write your concern here...</label>
-                <textarea id="help_text" name="help_text" class="form-field form-control" rows="3"></textarea>
+              <div class="form-element form-textarea mb-4 mt-2">
+                <label class="form-label font14 fw-medium text-dark">Please describe your concern or cancellation reason:</label>
+                <textarea id="help_text" name="help_text" class="form-field form-control" rows="3" placeholder="Write your reason here..."></textarea>
                 <input type="hidden" name="order_type" id="order_type" value="">
                 <div id="help-error-container" class="text-danger font12 mt-1"></div>
               </div>
               <div class="action d-flex justify-content-end align-items-center gap-3">
-                <button type="button" class="btn btn-outline-dark w-50 py-3" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-dark w-50 py-3">Submit</button>
+                <button type="button" class="btn modal-cancel-btn w-50" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn modal-submit-btn w-50">Submit Request</button>
               </div>
             </form>
           </div>
-          <div id="alreadyHelp" style="display: none">
-            <h3>Previous Request Status</h3>
-            Your Request: <span id="userRequest"></span>
-            <br>
-            Your Reason: <span id="userReason"></span>
-            <br>
-            Current Status: <span id="adminStatus"></span>
-            <br>
-            Response: <span id="adminResponse"></span>
+          <div id="alreadyHelp" style="display: none" class="p-3 bg-light rounded-3">
+            <h5 class="fw-bold font16 mb-3 text-dark">Previous Request Status</h5>
+            <p class="font14 mb-1"><strong>Request Type:</strong> <span id="userRequest"></span></p>
+            <p class="font14 mb-1"><strong>Your Reason:</strong> <span id="userReason"></span></p>
+            <p class="font14 mb-1"><strong>Current Status:</strong> <span id="adminStatus" class="badge bg-warning text-dark"></span></p>
+            <p class="font14 mb-0"><strong>Response:</strong> <span id="adminResponse"></span></p>
           </div>
         </div>
       </div>
