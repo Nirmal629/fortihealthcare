@@ -9,7 +9,6 @@
 old/error_log
 *.log
 old/
-storage
 stubs
 .env
 .env.backup
