@@ -63,8 +63,8 @@
 <body style="margin: 0; padding: 0; background-color: #f1f5f9; -webkit-font-smoothing: antialiased;">
   <?php
     $siteLogoUrl = function_exists('siteLogo') ? siteLogo() : null;
-    $appName = config('app.name', 'Maroon Crane');
-    $supportEmail = config('app.support_email', 'support@marooncrane.com');
+    $appName = config('app.name', 'FORTIER HEALTHCARE');
+    $supportEmail = config('app.support_email', 'fortiercustomersupport@gmail.com');
     $appUrl = config('app.url', '#');
   ?>
 

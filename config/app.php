@@ -14,7 +14,7 @@ return [
     */
 
   'name' => env('APP_NAME', 'Fortier Healthcare PVT. LTD.'),
-  'support_email' => env('SUPPORT_EMAIL', 'info@mediaclock.com.au'),
+  'support_email' => env('SUPPORT_EMAIL', 'fortiercustomersupport@gmail.com'),
   'reset_password_token_timeout' => 60,
   'two_factor_auth_admin' => env('ENABLE_TWO_FACTOR_AUTH_ADMIN', false),
   'admin_default_password' => env('ADMIN_DEFAULT_PASSWORD', 'Pass@123'),

@@ -24,21 +24,21 @@ class AuthService
         'password'     => Hash::make($data['password']),
       ]);
 
-      // // Send welcome email
-      // Mail::to($user->email)->send(new WelcomeUserMail($user));
-
       try {
         $view = 'emails.frontend.welcome';
-        $data = [
+        $emailData = [
           'user' => $user,
         ];
-        $subject = 'Welcome to Mayuri Store!';
+        $subject = 'Welcome to ' . config('app.name', 'our store') . '!';
         $cc = [];
         $bcc = [];
-        app('EmailService')->sendEmail($user->email, $subject, $view, $data, $cc, $bcc);
+        app('EmailService')->sendEmail($user->email, $subject, $view, $emailData, $cc, $bcc);
       } catch (\Exception $e) {
-        // General email failure handling
-        Log::error("Failed to send welcome email to {$user->email}: " . $e->getMessage());
+        try {
+          Mail::to($user->email)->send(new WelcomeUserMail($user));
+        } catch (\Exception $ex) {
+          Log::error("Failed to send welcome email to {$user->email}: " . $ex->getMessage());
+        }
       }
       return $user;
     });
@@ -55,21 +55,21 @@ class AuthService
         'password'     => Hash::make($data['password']),
       ]);
 
-      // // Send welcome email
-      // Mail::to($user->email)->send(new WelcomeUserMail($user));
-
       try {
         $view = 'emails.frontend.welcome';
-        $data = [
+        $emailData = [
           'user' => $user,
         ];
-        $subject = 'Welcome to Mayuri Store!';
+        $subject = 'Welcome to ' . config('app.name', 'our store') . '!';
         $cc = [];
         $bcc = [];
-        app('EmailService')->sendEmail($user->email, $subject, $view, $data, $cc, $bcc);
+        app('EmailService')->sendEmail($user->email, $subject, $view, $emailData, $cc, $bcc);
       } catch (\Exception $e) {
-        // General email failure handling
-        Log::error("Failed to send welcome email to {$user->email}: " . $e->getMessage());
+        try {
+          Mail::to($user->email)->send(new WelcomeUserMail($user));
+        } catch (\Exception $ex) {
+          Log::error("Failed to send welcome email to {$user->email}: " . $ex->getMessage());
+        }
       }
       return $user;
     });

@@ -28,7 +28,7 @@ class WelcomeUserMail extends Mailable
 	public function envelope(): Envelope
 	{
 		return new Envelope(
-			subject: 'Welcome to Mayuri Store!',
+			subject: 'Welcome to ' . config('app.name', 'our store') . '!',
 		);
 	}
 
@@ -38,7 +38,7 @@ class WelcomeUserMail extends Mailable
 	public function content(): Content
 	{
 		return new Content(
-			markdown: 'emails.frontend.welcome',
+			view: 'emails.frontend.welcome',
 		);
 	}
 

@@ -16,16 +16,35 @@
 
     <!-- Title -->
     <h1 style="margin: 0 0 16px; font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.3; letter-spacing: -0.4px;">
-      Welcome to {{ config('app.name', 'Maroon Crane') }}!
+      Welcome to {{ config('app.name', 'FORTIER HEALTHCARE') }}!
     </h1>
 
     <!-- Greeting & Message -->
     <p style="margin: 0 0 16px; font-size: 15px; line-height: 24px; color: #334155;">
-      Hello <strong style="color: #0f172a;">{{ $user->name }}</strong>,
+      Hello <strong style="color: #0f172a;">{{ !empty(trim($user->name ?? '')) ? $user->name : ($user->first_name ?? 'Valued Customer') }}</strong>,
     </p>
-    <p style="margin: 0 0 24px; font-size: 15px; line-height: 24px; color: #475569;">
-      Thank you for creating an account with us. We're thrilled to have you as part of our community. Your account is now active and ready to use!
+    <p style="margin: 0 0 20px; font-size: 15px; line-height: 24px; color: #475569;">
+      Thank you for creating an account with us. We're thrilled to have you as part of our community. Your account has been successfully registered and is now active and ready to use!
     </p>
+
+    <!-- Account Details Box -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0 0 24px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
+      <tr>
+        <td style="padding: 16px 20px;">
+          <span style="display: block; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 8px;">
+            Your Registered Account Details
+          </span>
+          <p style="margin: 0 0 4px; font-size: 14px; color: #334155;">
+            <strong>Email:</strong> {{ $user->email }}
+          </p>
+          @if(!empty($user->phone))
+          <p style="margin: 0; font-size: 14px; color: #334155;">
+            <strong>Phone:</strong> {{ $user->phone }}
+          </p>
+          @endif
+        </td>
+      </tr>
+    </table>
 
     <!-- Value Highlights Box -->
     <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 0 0 28px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;">
@@ -71,8 +90,8 @@
 
     <!-- Support Help -->
     <p style="margin: 0; font-size: 13px; line-height: 20px; color: #64748b;">
-      Have questions or need help getting started? Check out our online store or contact our customer support team at 
-      <a href="mailto:{{ config('app.support_email') }}" style="color: #2563eb; text-decoration: underline;">{{ config('app.support_email') }}</a>.
+      Have questions or need help getting started? Check Out our FORTIER HEALTHCARE store or Customer support team at 
+      <a href="mailto:fortiercustomersupport@gmail.com" style="color: #2563eb; text-decoration: underline;">fortiercustomersupport@gmail.com</a>.
     </p>
   </td>
 </tr>
