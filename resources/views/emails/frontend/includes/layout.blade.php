@@ -6,10 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
   <meta name="color-scheme" content="light" />
-  <title>{{ config('app.name', 'Maroon Crane') }}</title>
+  <title>{{ config('app.name', 'Fortier Healthcare') }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <!--[if mso]>
   <style type="text/css">
-    body, table, td, p, a, span { font-family: Arial, Helvetica, sans-serif !important; }
+    body, table, td, p, a, span { font-family: 'Poppins', Arial, Helvetica, sans-serif !important; }
   </style>
   <![endif]-->
   <style type="text/css">
@@ -63,7 +66,8 @@
 <body style="margin: 0; padding: 0; background-color: #f1f5f9; -webkit-font-smoothing: antialiased;">
   @php
     $siteLogoUrl = function_exists('siteLogo') ? siteLogo() : null;
-    $appName = config('app.name', 'FORTIER HEALTHCARE');
+    $rawAppName = config('app.name', 'Fortier Healthcare');
+    $appName = ($rawAppName === 'Laravel' || $rawAppName === 'Maroon Crane') ? 'Fortier Healthcare' : ucwords(strtolower($rawAppName));
     $supportEmail = config('app.support_email', 'fortiercustomersupport@gmail.com');
     $appUrl = config('app.url', '#');
   @endphp
@@ -80,28 +84,47 @@
 
         <!-- Main Email Container -->
         <table class="email-container" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0; margin: 0 auto;">
-          <!-- Header -->
+          <!-- Header with Theme-Based Background & Properly Centered Website-Type Logo -->
           <tr>
-            <td style="padding: 36px 40px 24px; text-align: center; background: #ffffff; border-bottom: 1px solid #f1f5f9;">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <td align="center" bgcolor="#f0b334" style="padding: 26px 20px; text-align: center; background-color: #f0b334; background: linear-gradient(135deg, #f0b334 0%, #e09e1f 100%); border-top-left-radius: 12px; border-top-right-radius: 12px; border-bottom: 3px solid #d99316;">
+              <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; text-align: center;">
                 <tr>
-                  <td align="center">
+                  <td align="center" style="text-align: center;">
                     <a href="{{ $appUrl }}" target="_blank" style="text-decoration: none; display: inline-block;">
-                      @if(!empty($siteLogoUrl) && !str_contains($siteLogoUrl, '.svg'))
-                        <img src="{{ $siteLogoUrl }}" alt="{{ $appName }}" style="max-height: 48px; max-width: 220px; height: auto; border: 0; outline: none; text-decoration: none; vertical-align: middle;" />
-                      @else
-                        <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
-                          <tr>
-                            <td style="background: linear-gradient(135deg, #2563eb, #1d4ed8); width: 42px; height: 42px; border-radius: 10px; text-align: center; vertical-align: middle; color: #ffffff; font-size: 22px; font-weight: 800; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-                              {{ strtoupper(substr($appName, 0, 1)) }}
-                            </td>
-                            <td style="padding-left: 12px; text-align: left; vertical-align: middle;">
-                              <span style="font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: block; line-height: 1.2;">{{ $appName }}</span>
-                              <span style="font-size: 11px; font-weight: 600; color: #64748b; letter-spacing: 0.5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: block;">Official E-Commerce Store</span>
-                            </td>
-                          </tr>
-                        </table>
-                      @endif
+                      <!-- Website-Style Logo Card (matching website furniture__headerlogo design) -->
+                      <table align="center" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); border: 1px solid rgba(255, 255, 255, 0.5);">
+                        <tr>
+                          <td style="padding: 8px 18px; vertical-align: middle;">
+                            <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                              <tr>
+                                @if(!empty($siteLogoUrl) && !str_contains($siteLogoUrl, '.svg'))
+                                  <td style="vertical-align: middle; padding-right: 12px;">
+                                    <img src="{{ $siteLogoUrl }}" alt="{{ $appName }}" height="44" style="height: 44px; max-height: 44px; max-width: 130px; width: auto; display: block; border: 0; outline: none; text-decoration: none; border-radius: 4px; object-fit: contain;" />
+                                  </td>
+                                @else
+                                  <td style="vertical-align: middle; padding-right: 12px;">
+                                    <table border="0" cellpadding="0" cellspacing="0">
+                                      <tr>
+                                        <td style="background-color: #f0b334; width: 38px; height: 38px; border-radius: 6px; text-align: center; vertical-align: middle; color: #ffffff; font-size: 20px; font-weight: 800; font-family: 'Poppins', -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
+                                          {{ strtoupper(substr($appName, 0, 1)) }}
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                @endif
+                                <td style="vertical-align: middle; text-align: left;">
+                                  <span style="font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 800; color: #111827; letter-spacing: -0.4px; line-height: 1.15; display: block; margin: 0;">
+                                    {{ $appName }}
+                                  </span>
+                                  <span style="font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 11px; font-weight: 700; color: #f0b334; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-top: 2px;">
+                                    Pvt. Ltd.
+                                  </span>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
                     </a>
                   </td>
                 </tr>

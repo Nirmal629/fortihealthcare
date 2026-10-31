@@ -6,10 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="format-detection" content="telephone=no, date=no, address=no, email=no" />
   <meta name="color-scheme" content="light" />
-  <title>{{ config('app.name', 'Maroon Crane') }}</title>
+  <title>{{ config('app.name', 'Fortier Healthcare') }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <!--[if mso]>
   <style type="text/css">
-    body, table, td, p, a, span { font-family: Arial, Helvetica, sans-serif !important; }
+    body, table, td, p, a, span { font-family: 'Poppins', Arial, Helvetica, sans-serif !important; }
   </style>
   <![endif]-->
   <style type="text/css">
