@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Vinkla\Hashids\Facades\Hashids;
+use App\Enums\OrderStatus;
+use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
@@ -174,11 +176,17 @@ class Order extends Model
       'updated_by' => user('admin')->id,
     ]);
 
-    $order->orderHistories()->create([
+    $orderHistory = $order->orderHistories()->create([
       'scheduled_date' => formatDate($data->scheduled_date),
       'scheduled_time' => $data->scheduled_time ?? null,
       'description' => $data->description ?? '',
       'status' => $decodedStatus,
+    ]);
+
+    // Send order status email to customer
+    $order->sendStatusNotificationEmail($decodedStatus, [
+      'history' => $orderHistory,
+      'note' => $data->description ?? null,
     ]);
 
     return response()->json([
@@ -186,6 +194,106 @@ class Order extends Model
       'message' => __('response.success.update', ['item' => 'Order Status']),
       'value' => Hashids::encode($order->id)
     ]);
+  }
+
+  /**
+   * Sends an order status update email notification to the customer.
+   *
+   * @param int|null $status
+   * @param array $extraData
+   * @return bool
+   */
+  public function sendStatusNotificationEmail(?int $status = null, array $extraData = []): bool
+  {
+    $status = $status ?? $this->order_status;
+    $this->loadMissing(['user', 'orderProducts.variant.product']);
+
+    $user = $this->user;
+    if (!$user || empty($user->email)) {
+      Log::warning("Order #{$this->order_number} has no associated user email for status notification.");
+      return false;
+    }
+
+    $templateMap = [
+      OrderStatus::CONFIRMED => [
+        'view' => 'emails.frontend.order-confirmation',
+        'subject' => "Your Order Confirmation - #{$this->order_number}",
+      ],
+      OrderStatus::CANCELLATION_INITIATED => [
+        'view' => 'emails.frontend.order-cancellation-initiated',
+        'subject' => "Order Cancellation Request Initiated - #{$this->order_number}",
+      ],
+      OrderStatus::CANCELLED => [
+        'view' => 'emails.frontend.order-cancelled',
+        'subject' => "Your Order Has Been Cancelled - #{$this->order_number}",
+      ],
+      OrderStatus::SHIPPED => [
+        'view' => 'emails.frontend.order-shipped',
+        'subject' => "Your Order Has Been Shipped - #{$this->order_number}",
+      ],
+      OrderStatus::DELIVERED => [
+        'view' => 'emails.frontend.order-delivered',
+        'subject' => "Your Order Has Been Delivered - #{$this->order_number}",
+      ],
+      OrderStatus::RETURN_ACCEPTED => [
+        'view' => 'emails.frontend.refund-accepted',
+        'subject' => "Return & Refund Request Accepted - #{$this->order_number}",
+      ],
+      OrderStatus::REFUND_DONE => [
+        'view' => 'emails.frontend.refund-done',
+        'subject' => "Your Refund Has Been Completed - #{$this->order_number}",
+      ],
+    ];
+
+    if (!isset($templateMap[$status])) {
+      return false;
+    }
+
+    $view = $templateMap[$status]['view'];
+    $subject = $templateMap[$status]['subject'];
+
+    // Resolve the customer's registered name filled upon registration
+    $registeredName = (!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+      ? $user->name
+      : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+        ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
+        : null);
+
+    if (empty($registeredName)) {
+      $shipping = is_array($this->shipping_address) ? $this->shipping_address : json_decode($this->shipping_address, true);
+      $shippingName = (!empty($shipping['name']) && strcasecmp(trim($shipping['name']), 'guest') !== 0) ? $shipping['name'] : null;
+      $registeredName = $shippingName ?: 'Valued Customer';
+    }
+
+    $data = array_merge([
+      'user' => $user,
+      'order' => $this,
+      'customerName' => $registeredName,
+      'status_label' => OrderStatus::label($status),
+      'history' => $extraData['history'] ?? $this->orderHistories()->latest()->first(),
+      'note' => $extraData['note'] ?? null,
+    ], $extraData);
+
+    try {
+      $bcc = [];
+      if ($status === OrderStatus::CONFIRMED && function_exists('adminMailsByRoleID')) {
+        $bcc = adminMailsByRoleID([SiteSetting::where('key', 'order_copy_to_id')->value('value') ?? 1]);
+      }
+
+      app('EmailService')->sendEmail(
+        $user->email,
+        $subject,
+        $view,
+        $data,
+        [],
+        $bcc
+      );
+
+      return true;
+    } catch (\Throwable $e) {
+      Log::error("Failed to send order status notification email for order #{$this->order_number} (status {$status}): " . $e->getMessage());
+      return false;
+    }
   }
 
 

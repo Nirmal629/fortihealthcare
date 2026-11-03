@@ -1,5 +1,23 @@
 @push('component-styles')
   <link rel="stylesheet" href="{{ asset('/public/backend/assetss/intlTelInput/intlTelInput.min.css') }}">
+  <style>
+    .iti__country-container,
+    .iti__selected-country {
+      cursor: default !important;
+      pointer-events: none !important;
+    }
+    .phone-input-container input {
+      position: relative !important;
+      z-index: 1 !important;
+      pointer-events: auto !important;
+      cursor: text !important;
+    }
+    .iti__arrow,
+    .iti__dropdown-content,
+    .iti__country-list {
+      display: none !important;
+    }
+  </style>
 @endpush
 <div class="mb-4 {{ $required ? 'required' : '' }} phone-input-container">
   <label for="phone" class="form-label">Phone</label>
@@ -12,24 +30,47 @@
   <script src="{{ asset('/public/backend/assetss/intlTelInput/intlTelInput.min.js') }}"></script>
 
   <script>
-    const input = document.querySelector("#{{ $id }}"),
-      iti = window.intlTelInput(input, {
-        initialCountry: "auto",
+    const input = document.querySelector("#{{ $id }}");
+    if (input) {
+      const iti = window.intlTelInput(input, {
+        allowDropdown: false,
+        initialCountry: "in",
+        onlyCountries: ["in"],
+        autoPlaceholder: "off",
         formatOnDisplay: false, // Prevent reformatting to national format
-        geoIpLookup: t => {
-          fetch("https://ipapi.co/json").then((t => t.json())).then((i => t(i.country_code))).catch((() => t("in")))
-        },
-        strictMode: true,
+        strictMode: false,
         loadUtils: () => import("{{ asset('/public/backend/assetss/intlTelInput/utils.js') }}")
-      }),
-      form = input.closest("form");
-    form && form.addEventListener("submit", (function(t) {
-      if (iti.isValidNumber()) {
-        const t = iti.getNumber();
-        input.value = t
+      });
+
+      const container = input.closest('.phone-input-container');
+      if (container) {
+        container.addEventListener('click', function(e) {
+          if (e.target !== input) {
+            input.focus();
+          }
+        });
       }
-    })), jQuery.validator.addMethod("validPhone", (function(t, i) {
-      return this.optional(i) || iti.isValidNumber()
-    }), "{{ __('validation.invalid', ['attribute' => 'Phone Number']) }}");
+
+      const form = input.closest("form");
+      if (form) {
+        form.addEventListener("submit", function(t) {
+          if (iti && typeof iti.isValidNumber === 'function' && iti.isValidNumber()) {
+            input.value = iti.getNumber();
+          }
+        });
+      }
+
+      if (window.jQuery && jQuery.validator) {
+        jQuery.validator.addMethod("validPhone", function(t, i) {
+          if (this.optional(i)) return true;
+          if (iti && typeof iti.isValidNumber === 'function') {
+            const valid = iti.isValidNumber();
+            if (valid === true) return true;
+          }
+          const clean = (t || '').replace(/[\s\-\(\)\.]/g, '');
+          return /^(?:(?:\+|0{0,2})91)?[6-9]\d{9}$/.test(clean) || /^\d{10}$/.test(clean);
+        }, "{{ __('validation.invalid', ['attribute' => 'Phone Number']) }}");
+      }
+    }
   </script>
 @endpush

@@ -66,14 +66,22 @@ class OrderReturn extends Model
     ]);
 
     if ($update && $status == 'approved') {
-      $order->order_status = $orderDetails->type == 'cancel' ? OrderStatus::CANCELLATION_INITIATED : OrderStatus::RETURN_ACCEPTED;
+      $newStatus = $orderDetails->type == 'cancel' ? OrderStatus::CANCELLATION_INITIATED : OrderStatus::RETURN_ACCEPTED;
+      $order->order_status = $newStatus;
       $order->save();
 
-      $order->orderHistories()->create([
+      $orderHistory = $order->orderHistories()->create([
         'scheduled_date' => now()->format('Y-m-d'),
         'scheduled_time' => now()->format('H:i:s'),
         'description'    => $orderDetails->type == 'cancel' ? 'Cancellation Initiated' : 'Return Accepted',
         'status'         => $order->order_status,
+      ]);
+
+      // Deliver status email to customer
+      $order->sendStatusNotificationEmail($newStatus, [
+        'history' => $orderHistory,
+        'note' => $request->admin_reason ?? null,
+        'return_request' => $orderDetails,
       ]);
     }
 

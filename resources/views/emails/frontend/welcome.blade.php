@@ -1,6 +1,13 @@
 @extends('emails.frontend.includes.layout')
 
 @section('content')
+@php
+  $customerName = (!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+    ? $user->name
+    : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+      ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
+      : 'Valued Customer');
+@endphp
 <tr>
   <td class="mobile-padding" style="padding: 36px 40px 32px;">
     <!-- Welcome Badge -->
@@ -16,12 +23,12 @@
 
     <!-- Title -->
     <h1 style="margin: 0 0 16px; font-size: 24px; font-weight: 800; color: #0f172a; line-height: 1.3; letter-spacing: -0.4px;">
-      Welcome to {{ config('app.name', 'FORTIER HEALTHCARE') }}!
+      Welcome to {{ config('app.name', 'Fortier Healthcare') }}!
     </h1>
 
     <!-- Greeting & Message -->
     <p style="margin: 0 0 16px; font-size: 15px; line-height: 24px; color: #334155;">
-      Hello <strong style="color: #0f172a;">{{ !empty(trim($user->name ?? '')) ? $user->name : ($user->first_name ?? 'Valued Customer') }}</strong>,
+      Hello <strong style="color: #0f172a;">{{ $customerName }}</strong>,
     </p>
     <p style="margin: 0 0 20px; font-size: 15px; line-height: 24px; color: #475569;">
       Thank you for creating an account with us. We're thrilled to have you as part of our community. Your account has been successfully registered and is now active and ready to use!
@@ -90,7 +97,7 @@
 
     <!-- Support Help -->
     <p style="margin: 0; font-size: 13px; line-height: 20px; color: #64748b;">
-      Have questions or need help getting started? Check Out our FORTIER HEALTHCARE store or Customer support team at 
+      Have questions or need help getting started? Check Out our Fortier Healthcare store or Customer support team at 
       <a href="mailto:fortiercustomersupport@gmail.com" style="color: #2563eb; text-decoration: underline;">fortiercustomersupport@gmail.com</a>.
     </p>
   </td>

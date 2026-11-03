@@ -16,13 +16,31 @@ class AuthService
   public function register(array $data): User
   {
     return DB::transaction(function () use ($data) {
-      $user = User::create([
-        'first_name'  => $data['first_name'],
-        'last_name'    => $data['last_name'],
-        'email'        => $data['email'],
-        'phone'        => $data['phone'] ?? null,
-        'password'     => Hash::make($data['password']),
-      ]);
+      $email = strtolower(trim($data['email']));
+      $phone = !empty($data['phone']) ? trim($data['phone']) : null;
+      $firstName = trim($data['first_name']);
+      $lastName = !empty($data['last_name']) ? trim($data['last_name']) : null;
+
+      $user = User::where('email', $email)->first();
+
+      if ($user) {
+        $user->update([
+          'first_name' => $firstName,
+          'last_name'  => $lastName,
+          'phone'      => $phone,
+          'password'   => Hash::make($data['password']),
+          'status'     => 1,
+        ]);
+      } else {
+        $user = User::create([
+          'first_name' => $firstName,
+          'last_name'  => $lastName,
+          'email'      => $email,
+          'phone'      => $phone,
+          'password'   => Hash::make($data['password']),
+          'status'     => 1,
+        ]);
+      }
 
       try {
         $view = 'emails.frontend.welcome';
@@ -104,7 +122,16 @@ class AuthService
 
   public function login(array $data): User
   {
-    $user = User::where('email', $data['email'])->first();
+    $loginInput = trim($data['email']);
+    $email = strtolower($loginInput);
+
+    $user = User::where('email', $email)
+      ->orWhere(function ($query) use ($loginInput) {
+        $query->whereNotNull('phone')
+              ->where('phone', '!=', '')
+              ->where('phone', $loginInput);
+      })
+      ->first();
 
     if (!$user) {
       throw ValidationException::withMessages([

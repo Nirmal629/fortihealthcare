@@ -1,6 +1,16 @@
 @extends('emails.frontend.includes.layout')
 
 @section('content')
+@php
+  $shipping = is_array($order->shipping_address ?? null) ? $order->shipping_address : json_decode($order->shipping_address ?? '', true);
+  $customerDisplayName = (!empty($customer->name) && strcasecmp(trim($customer->name), 'guest') !== 0)
+    ? $customer->name
+    : ((!empty($customer->first_name) && strcasecmp(trim($customer->first_name), 'guest') !== 0)
+      ? trim($customer->first_name . ' ' . ($customer->last_name ?? ''))
+      : ((!empty($shipping['name']) && strcasecmp(trim($shipping['name']), 'guest') !== 0)
+        ? $shipping['name']
+        : 'Customer'));
+@endphp
 <tr>
   <td class="mobile-padding" style="padding: 36px 40px 32px;">
     <!-- Order Notification Badge -->
@@ -37,7 +47,7 @@
           <table border="0" cellpadding="4" cellspacing="0" width="100%">
             <tr>
               <td style="font-size: 13px; color: #64748b; width: 35%;">Customer Name:</td>
-              <td style="font-size: 14px; font-weight: 600; color: #0f172a;">{{ $customer->name ?? 'Guest' }}</td>
+              <td style="font-size: 14px; font-weight: 600; color: #0f172a;">{{ $customerDisplayName }}</td>
             </tr>
             <tr>
               <td style="font-size: 13px; color: #64748b;">Customer Email:</td>

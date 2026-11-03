@@ -70,7 +70,9 @@ class User extends Authenticatable implements JWTSubject
       $this->first_name,
       $this->middle_name,
       $this->last_name,
-    ]);
+    ], function ($part) {
+      return !empty($part) && strcasecmp(trim($part), 'guest') !== 0;
+    });
 
     return implode(' ', $names);
   }
@@ -95,7 +97,9 @@ class User extends Authenticatable implements JWTSubject
       $this->first_name,
       $this->middle_name,
       $this->last_name,
-    ]);
+    ], function ($part) {
+      return !empty($part) && strcasecmp(trim($part), 'guest') !== 0;
+    });
 
     return count($parts) ? implode(' ', $parts) : 'N/A';
   }

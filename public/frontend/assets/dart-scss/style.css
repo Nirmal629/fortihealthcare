@@ -13229,13 +13229,20 @@ body.modal-open {
   border-color: #e2e8f0 !important;
 }
 
-.modern_profile_form .modern_phone_field_wrap .phone-input-container input.form-field {
+.modern_profile_form .modern_phone_field_wrap {
+  position: static !important;
+}
+
+.modern_profile_form .modern_phone_field_wrap .phone-input-container input.form-field,
+.modern_profile_form .modern_phone_field_wrap input#phone {
   height: 48px !important;
   border-radius: 10px !important;
   border: 1.5px solid #e2e8f0 !important;
   font-size: 14.5px !important;
   color: #0f172a !important;
   padding-left: 64px !important;
+  padding-right: 16px !important;
+  position: static !important;
   transition: all 0.2s ease !important;
 }
 

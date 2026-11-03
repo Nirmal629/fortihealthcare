@@ -68,54 +68,43 @@
       if (!input) return;
 
       let iti = window.intlTelInput(input, {
-          initialCountry: "auto",
+          allowDropdown: false,
+          initialCountry: "in",
+          onlyCountries: ["in"],
           autoPlaceholder: "off",
           formatOnDisplay: false,
-          geoIpLookup: function(callback) {
-              fetch("https://ipapi.co/json")
-                  .then(res => res.json())
-                  .then(data => callback(data.country_code))
-                  .catch(() => callback("IN"));
-          },
-          strictMode: true,
+          useFullscreenPopup: false,
+          strictMode: false,
           loadUtils: () => import("{{ asset('/public/backend/assetss/intlTelInput/utils.js') }}")
       });
 
+      const container = input.closest('.phone-input-container');
+      if (container) {
+        container.addEventListener('click', function(e) {
+          if (e.target !== input) {
+            input.focus();
+          }
+        });
+      }
+
       const form = input.closest("form");
 
-      input.addEventListener('open:countrydropdown', function () {
-          document.documentElement.style.overflowY = 'hidden';
-          document.body.style.overflowY = 'hidden';
-
-          const dropdown = document.querySelector('.iti__country-list');
-          if (dropdown) {
-              dropdown.style.overflowY = 'auto';
-              dropdown.addEventListener('wheel', stopPropagation, { passive: false });
-          }
-      });
-
-      input.addEventListener('close:countrydropdown', function () {
-          document.documentElement.style.overflowY = '';
-          document.body.style.overflowY = '';
-
-          const dropdown = document.querySelector('.iti__country-list');
-          if (dropdown) {
-              dropdown.removeEventListener('wheel', stopPropagation);
-          }
-      });
-
       form?.addEventListener("submit", function (e) {
-          if (iti.isValidNumber()) {
+          if (iti && typeof iti.isValidNumber === 'function' && iti.isValidNumber()) {
               input.value = iti.getNumber();
           }
       });
 
-      $.validator.addMethod("validPhone", function (value, element) {
-          return this.optional(element) || iti.isValidNumber();
-      }, "{{ __('validation.invalid', ['attribute' => 'Phone Number']) }}");
-
-      function stopPropagation(e) {
-          e.stopPropagation();
+      if (window.jQuery && $.validator) {
+          $.validator.addMethod("validPhone", function (value, element) {
+              if (this.optional(element)) return true;
+              if (iti && typeof iti.isValidNumber === 'function') {
+                  const valid = iti.isValidNumber();
+                  if (valid === true) return true;
+              }
+              const clean = (value || '').replace(/[\s\-\(\)\.]/g, '');
+              return /^(?:(?:\+|0{0,2})91)?[6-9]\d{9}$/.test(clean) || /^\d{10}$/.test(clean);
+          }, "{{ __('validation.invalid', ['attribute' => 'Phone Number']) }}");
       }
     }
 

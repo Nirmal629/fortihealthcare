@@ -21,7 +21,7 @@
 
     <!-- Greeting & Message -->
     <p style="margin: 0 0 16px; font-size: 15px; line-height: 24px; color: #334155;">
-      Hello <strong style="color: #0f172a;">{{ $name }}</strong>,
+      Hello <strong style="color: #0f172a;">{{ (!empty($name) && strcasecmp(trim($name), 'guest') !== 0) ? $name : 'Team Member' }}</strong>,
     </p>
     <p style="margin: 0 0 28px; font-size: 15px; line-height: 24px; color: #475569;">
       An administrative account has been created for you on the <strong>{{ config('app.name') }}</strong> administration portal. Below are your initial login credentials:

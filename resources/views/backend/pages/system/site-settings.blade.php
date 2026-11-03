@@ -9,6 +9,15 @@
       display: block;
       margin: 0 auto;
     }
+    .iti__selected-country {
+      cursor: default !important;
+      pointer-events: none !important;
+    }
+    .iti__arrow,
+    .iti__dropdown-content,
+    .iti__country-list {
+      display: none !important;
+    }
   </style>
 @endsection
 
@@ -731,28 +740,39 @@
       if (!input) return;
 
       const iti = window.intlTelInput(input, {
-        initialCountry: "auto",
-        geoIpLookup: callback => {
-          fetch("https://ipapi.co/json")
-            .then(response => response.json())
-            .then(data => callback(data.country_code))
-            .catch(() => callback("in"));
-        },
-        strictMode: true,
+        allowDropdown: false,
+        initialCountry: "in",
+        onlyCountries: ["in"],
+        strictMode: false,
         loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.3.0/build/js/utils.js")
       });
+
+      const container = input.closest('.phone-input-container') || input.parentElement;
+      if (container) {
+        container.addEventListener('click', function(e) {
+          if (e.target !== input) {
+            input.focus();
+          }
+        });
+      }
 
       const form = input.closest("form");
       if (form) {
         form.addEventListener("submit", (event) => {
-          if (iti.isValidNumber()) {
+          if (iti && typeof iti.isValidNumber === 'function' && iti.isValidNumber()) {
             input.value = iti.getNumber();
           }
         });
       }
 
       jQuery.validator.addMethod(validationName, function(value, element) {
-        return this.optional(element) || iti.isValidNumber();
+        if (this.optional(element)) return true;
+        if (iti && typeof iti.isValidNumber === 'function') {
+          const valid = iti.isValidNumber();
+          if (valid === true) return true;
+        }
+        const clean = (value || '').replace(/[\s\-\(\)\.]/g, '');
+        return /^(?:(?:\+|0{0,2})91)?[6-9]\d{9}$/.test(clean) || /^\d{10}$/.test(clean);
       }, `{{ __('validation.invalid', ['attribute' => '${attributeName}']) }}`);
 
       return iti;

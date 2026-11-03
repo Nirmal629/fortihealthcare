@@ -177,33 +177,40 @@
     position: relative !important;
   }
 
+  /* Static India Flag - disable dropdown & arrow, pass clicks to input */
   .living__signupwrap .inswrp .commonforms .allForm .phone-input-container .iti input.form-field,
   .living__signupwrap .inswrp .commonforms .allForm .phone-input-container input.form-field,
   .living__signupwrap .inswrp .commonforms .allForm .phone-input-container input[type="text"],
   .living__signupwrap .inswrp .commonforms .allForm .phone-input-container input[type="tel"] {
+    position: relative !important;
+    z-index: 1 !important;
+    cursor: text !important;
+    pointer-events: auto !important;
     padding-left: 64px !important;
   }
 
   .living__signupwrap .inswrp .commonforms .allForm .phone-input-container .iti__country-container {
     padding-left: 6px !important;
+    pointer-events: none !important;
+  }
+
+  .living__signupwrap .iti__arrow,
+  .iti__arrow {
+    display: none !important;
+  }
+
+  .living__signupwrap .iti__selected-country,
+  .iti__selected-country {
+    cursor: text !important;
+    pointer-events: none !important;
   }
 
   .living__signupwrap .iti--inline-dropdown .iti__dropdown-content,
-  .living__signupwrap .iti__dropdown-content {
-    position: absolute !important;
-    z-index: 99999 !important;
-    top: 100% !important;
-    left: 0 !important;
-    width: 100% !important;
-    min-width: 300px !important;
-    max-width: 100% !important;
-    background: #ffffff !important;
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.16), 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    margin-top: 6px !important;
-    overflow: hidden !important;
-    animation: itiDropdownSlide 0.2s ease-out !important;
+  .living__signupwrap .iti__dropdown-content,
+  .iti--inline-dropdown .iti__dropdown-content,
+  .iti__dropdown-content {
+    display: none !important;
+  }
   }
 
   @keyframes itiDropdownSlide {

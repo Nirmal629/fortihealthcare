@@ -43,7 +43,7 @@
                   </a>
                 </div>
                 <div class="info">
-                  <form class="allForm edit_details modern_profile_form" id="edit_details">
+                  <form class=" modern_profile_form" id="edit_details">
                     @csrf
                     <div class="row g-3">
                       <div class="col-md-6">
@@ -136,6 +136,19 @@
     </div>
   </section>
 @endsection
+
+@push('styles')
+  <style>
+    .modern_profile_form .modern_phone_field_wrap {
+      position: static !important;
+    }
+    .modern_profile_form .modern_phone_field_wrap .phone-input-container input.form-field,
+    .modern_profile_form .modern_phone_field_wrap input#phone {
+      padding-right: 16px !important;
+      position: static !important;
+    }
+  </style>
+@endpush
 
 @push('scripts')
   <script src="{{ asset('/public/common/js/custom_input.js?v=1' . time()) }}"></script>

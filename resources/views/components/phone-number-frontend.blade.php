@@ -39,6 +39,10 @@
       box-sizing: border-box !important;
       margin: 0 !important;
       display: block !important;
+      position: relative !important;
+      z-index: 1 !important;
+      cursor: text !important;
+      pointer-events: auto !important;
     }
 
     .iti__country-container {
@@ -48,11 +52,12 @@
       bottom: 0 !important;
       height: 48px !important;
       max-height: 48px !important;
-      z-index: 1050 !important;
+      z-index: 2 !important;
       overflow: visible !important;
       margin: 0 !important;
       padding: 0 !important;
       border: none !important;
+      pointer-events: none !important;
     }
 
     .iti__selected-country {
@@ -67,7 +72,8 @@
       box-shadow: none !important;
       display: flex !important;
       align-items: center !important;
-      cursor: pointer !important;
+      cursor: text !important;
+      pointer-events: none !important;
     }
 
     .iti__selected-country:focus,
@@ -77,6 +83,13 @@
       box-shadow: none !important;
       border: none !important;
       background: transparent !important;
+    }
+
+    /* Hide dropdown elements and dropdown arrow - always static India flag */
+    .iti__arrow,
+    .iti__dropdown-content,
+    .iti__country-list {
+      display: none !important;
     }
 
     .iti--inline-dropdown .iti__dropdown-content,
@@ -187,46 +200,49 @@
   <script src="{{ asset('/public/backend/assetss/intlTelInput/intlTelInput.min.js') }}"></script>
 
   <script>
-    const input = document.querySelector("#{{ $id }}"),
-      iti = window.intlTelInput(input, {
-        initialCountry: "auto",
+    const input = document.querySelector("#{{ $id }}");
+    if (input) {
+      const iti = window.intlTelInput(input, {
+        allowDropdown: false,
+        initialCountry: "in",
+        onlyCountries: ["in"],
         autoPlaceholder: "off",
         formatOnDisplay: false,
         useFullscreenPopup: false,
-        geoIpLookup: t => {
-          fetch("https://ipapi.co/json").then((t => t.json())).then((i => t(i.country_code))).catch((() => t("in")))
-        },
-        strictMode: true,
+        strictMode: false,
         loadUtils: () => import("{{ asset('/public/backend/assetss/intlTelInput/utils.js') }}")
-      }),
-      form = input.closest("form");
+      });
 
-    function handleDropdownWheel(e) {
-      e.stopPropagation();
+      // Ensure clicking anywhere near the flag focuses the input immediately
+      const container = input.closest('.phone-input-container');
+      if (container) {
+        container.addEventListener('click', function(e) {
+          if (e.target !== input) {
+            input.focus();
+          }
+        });
+      }
+
+      const form = input.closest("form");
+      if (form) {
+        form.addEventListener("submit", function(t) {
+          if (iti && typeof iti.isValidNumber === 'function' && iti.isValidNumber()) {
+            input.value = iti.getNumber();
+          }
+        });
+      }
+
+      if (window.jQuery && jQuery.validator) {
+        jQuery.validator.addMethod("validPhone", function(t, i) {
+          if (this.optional(i)) return true;
+          if (iti && typeof iti.isValidNumber === 'function') {
+            const valid = iti.isValidNumber();
+            if (valid === true) return true;
+          }
+          const clean = (t || '').replace(/[\s\-\(\)\.]/g, '');
+          return /^(?:(?:\+|0{0,2})91)?[6-9]\d{9}$/.test(clean) || /^\d{10}$/.test(clean);
+        }, "{{ __('validation.invalid', ['attribute' => 'Phone Number']) }}");
+      }
     }
-
-    input.addEventListener('open:countrydropdown', function() {
-      const dropdown = document.querySelector('.iti__country-list');
-      if (dropdown) {
-        dropdown.style.overflowY = 'auto';
-        dropdown.addEventListener('wheel', handleDropdownWheel, { passive: false });
-      }
-    });
-
-    input.addEventListener('close:countrydropdown', function() {
-      const dropdown = document.querySelector('.iti__country-list');
-      if (dropdown) {
-        dropdown.removeEventListener('wheel', handleDropdownWheel);
-      }
-    });
-
-    form && form.addEventListener("submit", (function(t) {
-      if (iti.isValidNumber()) {
-        const t = iti.getNumber();
-        input.value = t
-      }
-    })), jQuery.validator.addMethod("validPhone", (function(t, i) {
-      return this.optional(i) || iti.isValidNumber()
-    }), "{{ __('validation.invalid', ['attribute' => 'Phone Number']) }}");
   </script>
 @endpush

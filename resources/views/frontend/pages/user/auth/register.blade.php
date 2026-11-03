@@ -236,28 +236,38 @@
             form.find('.msg-error').text('');
           },
           success: function(res) {
-            // alertify.success('Registration successful! Redirecting...');
-            iziNotify("", 'Registration successful! Redirecting...', "success");
-            setTimeout(() => {
-              window.location.href = res.redirect || "{{ route('category.list') }}";
-            }, 1000);
+            if (res && res.success) {
+              iziNotify("", res.message || 'Registration successful! Redirecting...', "success");
+              setTimeout(() => {
+                window.location.href = res.redirect || "{{ route('category.list') }}";
+              }, 1000);
+            } else {
+              form.find('button[type="submit"]').prop('disabled', false).text('Create Account');
+              iziNotify("Oops!", (res && res.message) ? res.message : 'Registration failed. Please check your details.', "error");
+            }
           },
           error: function(xhr) {
             let response = xhr.responseJSON;
-            let errors = response.errors || {};
-            let message = response.message || 'Something went wrong. Please try again.';
+            let errors = (response && response.errors) ? response.errors : {};
+            let message = (response && response.message) ? response.message : 'Something went wrong. Please try again.';
 
             // Show only the first error
             let firstField = Object.keys(errors)[0];
-            if (firstField) {
-              // alertify.error(errors[firstField][0]);
+            if (firstField && errors[firstField][0]) {
               iziNotify("Oops!", errors[firstField][0], "error");
+            } else {
+              iziNotify("Oops!", message, "error");
             }
 
             for (let field in errors) {
               let input = form.find(`[name="${field}"]`);
               input.addClass('is-invalid');
-              input.siblings('.msg-error').text(errors[field][0]);
+              let errorContainer = input.closest('.phone-input-container');
+              if (errorContainer.length) {
+                errorContainer.find('.msg-error').text(errors[field][0]);
+              } else {
+                input.siblings('.msg-error').text(errors[field][0]);
+              }
             }
 
             form.find('button[type="submit"]').prop('disabled', false).text('Create Account');

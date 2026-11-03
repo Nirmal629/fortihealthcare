@@ -19,9 +19,13 @@
       Your One-Time Password
     </h1>
 
+@php
+  $customerName = (!empty($name) && strcasecmp(trim($name), 'guest') !== 0) ? $name : 'Valued Customer';
+@endphp
+
     <!-- Greeting & Message -->
     <p style="margin: 0 0 16px; font-size: 15px; line-height: 24px; color: #334155;">
-      Hello <strong style="color: #0f172a;">{{ $name ?? 'there' }}</strong>,
+      Hello <strong style="color: #0f172a;">{{ $customerName }}</strong>,
     </p>
     <p style="margin: 0 0 28px; font-size: 15px; line-height: 24px; color: #475569;">
       We received a request to log into your account. To proceed, please use the verification code below:

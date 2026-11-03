@@ -120,14 +120,32 @@ class AuthController extends Controller
         'message' => 'Welcome! Your account has been created.',
         'redirect' => $redirectUrl,
       ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+      $errors = $e->errors();
+      $firstError = collect($errors)->flatten()->first() ?? 'Registration failed.';
+      return response()->json([
+        'success' => false,
+        'message' => $firstError,
+        'errors'  => $errors,
+      ], 422);
+    } catch (\Illuminate\Database\QueryException $e) {
+      Log::error('Registration database error: ' . $e->getMessage());
+      $message = 'Unable to create account. Please check your details and try again.';
+      if (str_contains($e->getMessage(), 'users_email_unique')) {
+        $message = 'This email is already registered.';
+      } elseif (str_contains($e->getMessage(), 'users_phone_unique')) {
+        $message = 'This phone number is already registered.';
+      }
+      return response()->json([
+        'success' => false,
+        'message' => $message,
+      ], 422);
     } catch (\Exception $e) {
-      // dd($e->getMessage());
       Log::error('Registration error: ' . $e->getMessage());
       return response()->json([
         'success' => false,
-        'message' => 'Your account was created, but we couldn\'t send the welcome email. Please check your email address or contact support.',
-        'redirect' => route('category.list'),
-      ], 200);
+        'message' => 'Unable to create account. Please try again later.',
+      ], 422);
     }
   }
 

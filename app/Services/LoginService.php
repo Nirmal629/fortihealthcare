@@ -124,11 +124,18 @@ class LoginService
       ['email_otp' => $otp]
     );
 
+    // Resolve registered customer name (avoiding "Guest")
+    $customerName = (!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+      ? $user->name
+      : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+        ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
+        : null);
+
     // Send email
     $subject = 'Your OTP Code';
     $template = 'emails.otp';
     $params = [
-      'name' => $user->name,
+      'name' => $customerName,
       'otp'  => $otp,
     ];
 

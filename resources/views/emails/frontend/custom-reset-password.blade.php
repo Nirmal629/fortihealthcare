@@ -23,9 +23,17 @@
       Reset Your Password
     </h1>
 
+@php
+  $customerName = (!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+    ? $user->name
+    : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+      ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
+      : 'Valued Customer');
+@endphp
+
     <!-- Greeting & Message -->
     <p style="margin: 0 0 16px; font-size: 15px; line-height: 24px; color: #334155;">
-      Hello <strong style="color: #0f172a;">{{ $user->name }}</strong>,
+      Hello <strong style="color: #0f172a;">{{ $customerName }}</strong>,
     </p>
     <p style="margin: 0 0 28px; font-size: 15px; line-height: 24px; color: #475569;">
       We received a request to reset the password for your customer account on <strong>{{ config('app.name') }}</strong>. Click the button below to choose your new password:

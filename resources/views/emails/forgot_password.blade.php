@@ -21,7 +21,7 @@
 
     <!-- Greeting & Message -->
     <p style="margin: 0 0 16px; font-size: 15px; line-height: 24px; color: #334155;">
-      Hello <strong style="color: #0f172a;">{{ $name ?? 'there' }}</strong>,
+      Hello <strong style="color: #0f172a;">{{ (!empty($name) && strcasecmp(trim($name), 'guest') !== 0) ? $name : 'Valued Customer' }}</strong>,
     </p>
     <p style="margin: 0 0 28px; font-size: 15px; line-height: 24px; color: #475569;">
       We received a request to reset the password for your account on <strong>{{ config('app.name') }}</strong>. Click the button below to choose a new password:
