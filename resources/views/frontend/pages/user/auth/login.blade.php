@@ -22,7 +22,7 @@
               <div class="righthead">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
                   <h3 class="font25 mb-0">Welcome Back!</h3>
-                  <a href="{{ route('register') }}" class="btn btn-outline-dark btn-sm px-3 py-1 fw-semibold text-decoration-none" style="border-radius: 8px; font-size: 13px;" title="Register Here">Register Here</a>
+                  <a href="{{ route('register') }}" class="btn btn-outline-dark btn-sm px-3 py-1 fw-semibold text-decoration-none" style="border-radius: 0; font-size: 13px;" title="Register Here">Register Here</a>
                 </div>
                 <p class="c--menuc">Log in to track orders, save items to your wishlist. Don't have an account? <a href="{{ route('register') }}" class="fw-bold text-dark text-decoration-underline" title="Register Here">Register Here</a></p>
               </div>

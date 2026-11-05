@@ -16,36 +16,48 @@
 
 <section class="contactUs_sec custom-get-in-touch py-4 py-lg-5" id="getintouchId">
     <div class="container-xxl">
-        <div class="row align-items-center gy-4 gy-lg-0">
+        <div class="row  gy-4 gy-lg-0">
             <!-- Left side image -->
-            <div class="col-lg-5 col-md-12 text-center text-lg-start">
-                <div class="image-wrapper">
-                    <img src="{{ $bannerImage }}" alt="Get In Touch" class="img-fluid rounded-4 shadow-sm">
+            <div class="col-lg-6 col-md-12 text-center text-lg-start">
+                <div class="image-wrapper git-visual-wrapper h-100">
+                    <img src="{{ $bannerImage }}" alt="Get In Touch" class="img-fluid rounded-0 shadow-sm w-100 h-100" style="object-fit: cover; min-height: 380px;">
                 </div>
             </div>
             <!-- Right side form -->
-            <div class="col-lg-7 col-md-12">
-                <div class="form-wrapper">
+            <div class="col-lg-6 col-md-12">
+                <div class="form-wrapper px-lg-3">
                     <h2 class="form-heading">Get In <span>Touch</span></h2>
                     <form id="getInTouchForm" action="{{ route('contact-us.store') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group mb-3">
                                 <label for="git_name">Your Name <span class="text-danger">*</span> :</label>
-                                <input type="text" name="name" class="form-control custom-input" id="git_name" placeholder="Enter your name">
+                                <div class="git-input-wrap">
+                                    <span class="git-input-icon material-symbols-outlined">person</span>
+                                    <input type="text" name="name" class="form-control custom-input" id="git_name" placeholder="Enter your name">
+                                </div>
                             </div>
                             <div class="col-md-6 form-group mb-3">
                                 <label for="git_email">Email address <span class="text-danger">*</span> :</label>
-                                <input type="email" name="email" class="form-control custom-input" id="git_email" placeholder="Enter your email">
+                                <div class="git-input-wrap">
+                                    <span class="git-input-icon material-symbols-outlined">mail</span>
+                                    <input type="email" name="email" class="form-control custom-input" id="git_email" placeholder="Enter your email">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group mb-3">
                             <label for="git_phone">Phone Number :</label>
-                            <input type="tel" name="phone" class="form-control custom-input" id="git_phone" placeholder="Enter phone number">
+                            <div class="git-input-wrap">
+                                <span class="git-input-icon material-symbols-outlined">call</span>
+                                <input type="tel" name="phone" class="form-control custom-input" id="git_phone" placeholder="Enter phone number">
+                            </div>
                         </div>
                         <div class="form-group mb-4">
                             <label for="git_message">Message <span class="text-danger">*</span> :</label>
-                            <textarea name="message" class="form-control custom-input" id="git_message" rows="4" placeholder="Message....."></textarea>
+                            <div class="git-input-wrap git-textarea-wrap">
+                                <span class="git-input-icon material-symbols-outlined">chat</span>
+                                <textarea name="message" class="form-control custom-input" id="git_message" rows="4" placeholder="Message....."></textarea>
+                            </div>
                         </div>
                         <button type="submit" class="btn custom-submit-btn learnmore_btn" id="git_submit_btn">
                             Submit Message
@@ -104,7 +116,11 @@
         errorElement: "span",
         errorClass: "text-danger d-block mt-1 font13",
         errorPlacement: function(error, element) {
-          error.insertAfter(element);
+          if (element.closest('.git-input-wrap').length) {
+            error.insertAfter(element.closest('.git-input-wrap'));
+          } else {
+            error.insertAfter(element);
+          }
         },
         submitHandler: function(form) {
           var $btn = $('#git_submit_btn');

@@ -58,7 +58,7 @@
     </div>
 
     <?php if(isset($latestProducts) && $latestProducts->hasPages()): ?>
-    <div class="mt-5 d-flex justify-content-center">
+    <div class="mt-5 d-flex justify-content-center category-featured-pagination-wrap">
       <?php echo e($latestProducts->links('pagination::bootstrap-5')); ?>
 
     </div>
@@ -148,6 +148,7 @@
         color: #ffffff;
         position: relative;
         border: 1px solid transparent;
+        border-radius: 0 !important;
         transition: all 0.5s;
         z-index: 1;
         overflow: hidden;
@@ -171,6 +172,141 @@
     .filter-btn-custom:hover {
         color: #f0b334 !important;
         border-color: #f0b334 !important;
+    }
+
+    /* =========================================================
+       THEME-BASED FEATURED COLLECTION PAGINATION DESIGN
+       ========================================================= */
+    .category-featured-pagination-wrap {
+      width: 100% !important;
+      margin-top: 3rem !important;
+    }
+
+    .category-featured-pagination-wrap nav {
+      width: 100% !important;
+      background: #ffffff !important;
+      border: 1px solid #e2e8f0 !important;
+      border-radius: 0 !important;
+      padding: 18px 24px !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 16px !important;
+    }
+
+    .category-featured-pagination-wrap nav > div {
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .category-featured-pagination-wrap .text-muted,
+    .category-featured-pagination-wrap p.small {
+      color: #64748b !important;
+      font-size: 14px !important;
+      margin: 0 !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.01em !important;
+    }
+
+    .category-featured-pagination-wrap .text-muted .fw-semibold,
+    .category-featured-pagination-wrap p.small .fw-semibold {
+      color: #0f172a !important;
+      font-weight: 700 !important;
+    }
+
+    .category-featured-pagination-wrap .pagination {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      list-style: none !important;
+    }
+
+    .category-featured-pagination-wrap .pagination .page-item {
+      margin: 0 !important;
+    }
+
+    .category-featured-pagination-wrap .pagination .page-link {
+      min-width: 42px !important;
+      height: 42px !important;
+      padding: 0 14px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 14.5px !important;
+      font-weight: 600 !important;
+      color: #334155 !important;
+      background-color: #ffffff !important;
+      border: 1.5px solid #e2e8f0 !important;
+      border-radius: 0 !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      text-decoration: none !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+      cursor: pointer !important;
+    }
+
+    .category-featured-pagination-wrap .pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+      color: #f0b334 !important;
+      border-color: #f0b334 !important;
+      background-color: #fffdf5 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 4px 12px rgba(240, 179, 52, 0.25) !important;
+    }
+
+    .category-featured-pagination-wrap .pagination .page-item.active .page-link {
+      background-color: #f0b334 !important;
+      border-color: #f0b334 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 14px rgba(240, 179, 52, 0.4) !important;
+      cursor: default !important;
+      transform: none !important;
+    }
+
+    .category-featured-pagination-wrap .pagination .page-item.disabled .page-link {
+      color: #cbd5e1 !important;
+      background-color: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+      cursor: not-allowed !important;
+      opacity: 0.7 !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .category-featured-pagination-wrap .pagination .page-item.disabled span.page-link:not([aria-label]):not([aria-hidden]) {
+      background: transparent !important;
+      border-color: transparent !important;
+      color: #94a3b8 !important;
+      min-width: 24px !important;
+      box-shadow: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .category-featured-pagination-wrap nav {
+        flex-direction: column !important;
+        justify-content: center !important;
+        text-align: center !important;
+        padding: 16px !important;
+        gap: 14px !important;
+      }
+      .category-featured-pagination-wrap nav > div {
+        justify-content: center !important;
+        width: 100% !important;
+      }
+      .category-featured-pagination-wrap .pagination {
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+      }
+      .category-featured-pagination-wrap .pagination .page-link {
+        min-width: 38px !important;
+        height: 38px !important;
+        padding: 0 10px !important;
+        font-size: 13.5px !important;
+      }
     }
   </style>
 <?php $__env->stopPush(); ?>

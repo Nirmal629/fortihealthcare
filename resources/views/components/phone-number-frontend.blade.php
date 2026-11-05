@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="{{ asset('/public/backend/assetss/intlTelInput/intlTelInput.min.css') }}">
   <style>
     .phone-input-container {
-      position: relative !important;
+      position: static !important;
       z-index: 1050 !important;
       width: 100% !important;
       height: 48px !important;

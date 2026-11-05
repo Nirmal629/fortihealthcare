@@ -383,44 +383,107 @@
     text-decoration: underline !important;
   }
 
-  /* Submit Buttons */
+  /* Submit Buttons (Login Here / Auth Submit) - Theme Color & Signature Animation */
+  .living__signupwrap .btn,
+  .living__signupwrap button,
+  .living__signupwrap a.btn,
   .living__signupwrap .btn-auth-submit,
   .living__signupwrap .btn-dark,
-  .living__signupwrap button[type="submit"] {
+  .living__signupwrap button[type="submit"],
+  .btn-auth-submit {
     width: 100% !important;
     height: 48px !important;
-    background: #0f172a !important;
+    background-color: #f0b334 !important;
     color: #ffffff !important;
-    border: none !important;
-    border-radius: 10px !important;
+    border: 1.5px solid #f0b334 !important;
+    border-radius: 0 !important;
     font-size: 15px !important;
     font-weight: 600 !important;
     letter-spacing: 0.01em !important;
     cursor: pointer !important;
-    display: flex !important;
+    display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 8px !important;
-    transition: all 0.25s ease !important;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12) !important;
-    padding: 0 16px !important;
-    margin-top:10px !important;
+    padding: 0 44px 0 20px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+    transition: all 0.5s !important;
+    box-shadow: 0 4px 14px rgba(240, 179, 52, 0.3) !important;
+    margin-top: 10px !important;
     margin-bottom: 20px !important;
+    text-decoration: none !important;
+  }
+
+  .living__signupwrap .btn-auth-submit::after,
+  .living__signupwrap .btn-dark::after,
+  .living__signupwrap button[type="submit"]::after,
+  .btn-auth-submit::after {
+    content: 'arrow_forward' !important;
+    font-family: 'Material Symbols Outlined' !important;
+    position: absolute !important;
+    top: 50% !important;
+    right: 18px !important;
+    transform: translateY(-50%) !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    color: inherit !important;
+    z-index: 2 !important;
+    transition: all 0.5s !important;
+  }
+
+  .living__signupwrap .btn-auth-submit::before,
+  .living__signupwrap .btn-dark::before,
+  .living__signupwrap button[type="submit"]::before,
+  .btn-auth-submit::before {
+    content: "" !important;
+    background-color: #ffffff !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    left: -20% !important;
+    right: -20% !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    transform: skewX(-45deg) scale(0, 1) !important;
+    transition: all 0.5s !important;
+  }
+
+  .living__signupwrap .btn-auth-submit:hover::before,
+  .living__signupwrap .btn-dark:hover::before,
+  .living__signupwrap button[type="submit"]:hover::before,
+  .btn-auth-submit:hover::before {
+    transform: skewX(-45deg) scale(1, 1) !important;
   }
 
   .living__signupwrap .btn-auth-submit:hover,
   .living__signupwrap .btn-dark:hover,
-  .living__signupwrap button[type="submit"]:hover {
-    background: #f0b334 !important;
-    color: #0f172a !important;
-    box-shadow: 0 6px 18px rgba(240, 179, 52, 0.3) !important;
-    transform: translateY(-1px) !important;
+  .living__signupwrap button[type="submit"]:hover,
+  .btn-auth-submit:hover {
+    color: #f0b334 !important;
+    border-color: #f0b334 !important;
+    background-color: #f0b334 !important;
+    box-shadow: 0 6px 20px rgba(240, 179, 52, 0.45) !important;
   }
 
-  .living__signupwrap button[type="submit"]:disabled {
+  .living__signupwrap .btn-auth-submit:active,
+  .living__signupwrap .btn-dark:active,
+  .living__signupwrap button[type="submit"]:active,
+  .btn-auth-submit:active {
+    transform: scale(0.98) !important;
+  }
+
+  .living__signupwrap button[type="submit"]:disabled,
+  .btn-auth-submit:disabled {
     opacity: 0.7 !important;
     cursor: not-allowed !important;
+    pointer-events: none !important;
     transform: none !important;
+  }
+
+  .living__signupwrap button[type="submit"]:disabled::before,
+  .btn-auth-submit:disabled::before {
+    display: none !important;
   }
 
   /* Divider */
@@ -463,7 +526,7 @@
     min-height: 48px !important;
     background: #ffffff !important;
     border: 1.5px solid #e2e8f0 !important;
-    border-radius: 10px !important;
+    border-radius: 0 !important;
     color: #334155 !important;
     font-size: 14.5px !important;
     font-weight: 600 !important;

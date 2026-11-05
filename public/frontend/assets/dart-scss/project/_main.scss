@@ -1204,8 +1204,8 @@ $animationSpeed: 40s; // Define the variable globally
 
 .furniture_cart_inside_wrap {
   display: grid;
-  grid-template-columns: 60% 1fr;
-  column-gap: 4rem;
+  grid-template-columns: 64% 1fr;
+  column-gap: 41em;
 
   @media(max-width: 1600px) {
     column-gap: 3rem;

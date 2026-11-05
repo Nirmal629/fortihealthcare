@@ -123,7 +123,7 @@
         </div>
 
         @if (isset($variants) && $variants instanceof \Illuminate\Pagination\LengthAwarePaginator && $variants->hasPages())
-          <div class="mt-4 d-flex justify-content-center">
+          <div class="mt-4 d-flex justify-content-center category-featured-pagination-wrap">
             {{ $variants->withQueryString()->links('pagination::bootstrap-5') }}
           </div>
         @endif

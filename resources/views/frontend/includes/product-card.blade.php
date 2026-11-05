@@ -33,7 +33,7 @@
         </form>
 
         @if ($isDiscount && !$isOutOfStock)
-          <div class="tag primary font12 position-absolute top-0 start-0 m-3 z-1 shadow-sm rounded-pill px-3 py-1 bg-primary text-white">
+          <div class="tag primary font12 position-absolute top-0 start-0 m-3 z-1 shadow-sm rounded-pill px-3 py-1  text-white">
             {{ $discount_percent }} Off
           </div>
         @endif

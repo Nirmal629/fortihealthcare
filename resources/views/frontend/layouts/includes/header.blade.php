@@ -167,7 +167,7 @@
                       <li><hr class="dropdown-divider my-1"></li>
 
                       <li class="pb-2">
-                        <button type="button" class="dropdown-item d-flex align-items-center gap-2 px-3 py-2 text-danger font14 bg-transparent border-0 w-100 text-start btn-trigger-logout" style="cursor: pointer;" onclick="promptLogoutConfirmation(event)">
+                        <button type="button" class="dropdown-item d-flex align-items-center gap-2 px-3 py-2 text-danger font14 bg-transparent border-0 w-100 text-start btn-trigger-logout" style="cursor: pointer;" onclick="promptLogoutConfirmation(event)" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
                           <span class="material-symbols-outlined font20 text-danger">logout</span>
                           <span>Log Out</span>
                         </button>
@@ -299,7 +299,7 @@
             <span class="material-symbols-outlined">person</span>
             <span>My Profile</span>
           </a>
-          <button type="button" class="sidebar-footer-item text-danger border-0 bg-transparent w-100 text-start p-2 d-flex align-items-center gap-2" style="font-size: 0.92rem; cursor: pointer;" onclick="promptLogoutConfirmation(event)">
+          <button type="button" class="sidebar-footer-item text-danger border-0 bg-transparent w-100 text-start p-2 d-flex align-items-center gap-2" style="font-size: 0.92rem; cursor: pointer;" onclick="promptLogoutConfirmation(event)" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
             <span class="material-symbols-outlined">logout</span>
             <span>Log Out</span>
           </button>
@@ -396,6 +396,20 @@
 
 body.sidebar-open {
   overflow: hidden !important;
+}
+
+/* Logout Confirmation Modal Layering */
+#logoutConfirmModal {
+  z-index: 1000005 !important;
+}
+
+#logoutConfirmModal.show {
+  display: block !important;
+}
+
+body.modal-open .modal-backdrop,
+.modal-backdrop.logout-modal-backdrop {
+  z-index: 1000000 !important;
 }
 
 /* Sidebar Header */
@@ -1314,7 +1328,7 @@ body.sidebar-open {
   font-size: 13.5px !important;
   font-weight: 600 !important;
   padding: 7px 18px !important;
-  border-radius: 20px !important;
+  border-radius: 0 !important;
   border: none !important;
   box-shadow: 0 2px 8px rgba(240, 179, 52, 0.35) !important;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -1475,8 +1489,13 @@ body.sidebar-open {
   function openCustomMobileSidebar() {
     var sidebar = document.getElementById('customMobileSidebar');
     var backdrop = document.getElementById('customSidebarBackdrop');
+    if (backdrop) {
+      backdrop.style.opacity = '';
+      backdrop.style.visibility = '';
+      backdrop.style.pointerEvents = '';
+      backdrop.classList.add('active');
+    }
     if (sidebar) sidebar.classList.add('active');
-    if (backdrop) backdrop.classList.add('active');
     document.body.classList.add('sidebar-open');
   }
 
@@ -1484,7 +1503,12 @@ body.sidebar-open {
     var sidebar = document.getElementById('customMobileSidebar');
     var backdrop = document.getElementById('customSidebarBackdrop');
     if (sidebar) sidebar.classList.remove('active');
-    if (backdrop) backdrop.classList.remove('active');
+    if (backdrop) {
+      backdrop.classList.remove('active');
+      backdrop.style.opacity = '0';
+      backdrop.style.visibility = 'hidden';
+      backdrop.style.pointerEvents = 'none';
+    }
     document.body.classList.remove('sidebar-open');
   }
 
@@ -1509,36 +1533,105 @@ body.sidebar-open {
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       closeCustomMobileSidebar();
+      closeLogoutConfirmModal();
     }
   });
 
   document.addEventListener('click', function(e) {
-    var target = e.target.closest('.custom-mobile-sidebar-drawer a:not(.sidebar-dropdown-toggle)');
-    if (target) {
+    var target = e.target.closest('.custom-mobile-sidebar-drawer a:not(.sidebar-dropdown-toggle), .custom-mobile-sidebar-drawer button:not(.sidebar-dropdown-toggle):not(.sidebar-close-btn)');
+    if (target && !target.classList.contains('sidebar-footer-item')) {
       closeCustomMobileSidebar();
     }
   });
 
+  function ensureLogoutModalInBody() {
+    var modalEl = document.getElementById('logoutConfirmModal');
+    if (modalEl && modalEl.parentNode !== document.body) {
+      document.body.appendChild(modalEl);
+    }
+    return modalEl;
+  }
+
   function promptLogoutConfirmation(e) {
     if (e) {
-      e.preventDefault();
-      e.stopPropagation();
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
     }
-    var modalEl = document.getElementById('logoutConfirmModal');
-    if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-      var logoutModal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-      logoutModal.show();
-    } else if (typeof swalConfirm === 'function') {
-      swalConfirm('Log Out', 'Are you sure you want to log out?').then(function(result) {
-        if (result && (result.isConfirmed || result.value)) {
-          submitHeaderLogout();
-        }
-      });
-    } else {
+
+    // 1. Immediately close mobile sidebar drawer & backdrop without delay
+    closeCustomMobileSidebar();
+
+    // 2. Ensure modal is in body to avoid any parent container stacking context or transform trapping
+    var modalEl = ensureLogoutModalInBody();
+    if (!modalEl) {
       if (confirm('Are you sure you want to log out?')) {
         submitHeaderLogout();
       }
+      return;
     }
+
+    // 3. Open modal via Bootstrap 5 getOrCreateInstance / new instance
+    try {
+      if (window.bootstrap && window.bootstrap.Modal) {
+        var modalInstance = (typeof window.bootstrap.Modal.getOrCreateInstance === 'function')
+          ? window.bootstrap.Modal.getOrCreateInstance(modalEl)
+          : (window.bootstrap.Modal.getInstance(modalEl) || new window.bootstrap.Modal(modalEl));
+        modalInstance.show();
+        return;
+      }
+    } catch (err) {
+      console.warn('Bootstrap modal open error:', err);
+    }
+
+    // 4. Fallback via jQuery modal
+    if (window.jQuery && typeof window.jQuery(modalEl).modal === 'function') {
+      window.jQuery(modalEl).modal('show');
+      return;
+    }
+
+    // 5. Native DOM Fallback
+    modalEl.classList.add('show');
+    modalEl.style.display = 'block';
+    modalEl.setAttribute('aria-modal', 'true');
+    modalEl.removeAttribute('aria-hidden');
+    document.body.classList.add('modal-open');
+    if (!document.querySelector('.modal-backdrop')) {
+      var bd = document.createElement('div');
+      bd.className = 'modal-backdrop fade show logout-modal-backdrop';
+      bd.id = 'manualLogoutBackdrop';
+      bd.onclick = closeLogoutConfirmModal;
+      document.body.appendChild(bd);
+    }
+  }
+
+  function closeLogoutConfirmModal() {
+    var modalEl = document.getElementById('logoutConfirmModal');
+    if (!modalEl) return;
+
+    try {
+      if (window.bootstrap && window.bootstrap.Modal) {
+        var inst = (typeof window.bootstrap.Modal.getInstance === 'function')
+          ? window.bootstrap.Modal.getInstance(modalEl)
+          : null;
+        if (inst) {
+          inst.hide();
+          return;
+        }
+      }
+    } catch (e) {}
+
+    if (window.jQuery && typeof window.jQuery(modalEl).modal === 'function') {
+      window.jQuery(modalEl).modal('hide');
+      return;
+    }
+
+    modalEl.classList.remove('show');
+    modalEl.style.display = 'none';
+    modalEl.setAttribute('aria-hidden', 'true');
+    modalEl.removeAttribute('aria-modal');
+    document.body.classList.remove('modal-open');
+    var bds = document.querySelectorAll('.modal-backdrop, #manualLogoutBackdrop');
+    bds.forEach(function(b) { b.remove(); });
   }
 
   function submitHeaderLogout() {
@@ -1554,22 +1647,54 @@ body.sidebar-open {
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initHeaderProfileDropdown);
-  } else {
-    initHeaderProfileDropdown();
+  function initLogoutModalBackdropWatcher() {
+    var logoutModalEl = document.getElementById('logoutConfirmModal');
+    if (logoutModalEl) {
+      logoutModalEl.addEventListener('show.bs.modal', function() {
+        setTimeout(function() {
+          var backdrops = document.querySelectorAll('.modal-backdrop');
+          if (backdrops.length) {
+            backdrops[backdrops.length - 1].classList.add('logout-modal-backdrop');
+            backdrops[backdrops.length - 1].style.zIndex = '1000000';
+          }
+        }, 10);
+      });
+      logoutModalEl.addEventListener('click', function(e) {
+        if (e.target === logoutModalEl) {
+          closeLogoutConfirmModal();
+        }
+      });
+    }
   }
 
+  function initHeaderComponents() {
+    initHeaderProfileDropdown();
+    ensureLogoutModalInBody();
+    initLogoutModalBackdropWatcher();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeaderComponents);
+  } else {
+    initHeaderComponents();
+  }
+  window.addEventListener('load', ensureLogoutModalInBody);
+
+  window.openCustomMobileSidebar = openCustomMobileSidebar;
+  window.closeCustomMobileSidebar = closeCustomMobileSidebar;
+  window.toggleSidebarServices = toggleSidebarServices;
   window.initHeaderProfileDropdown = initHeaderProfileDropdown;
   window.promptLogoutConfirmation = promptLogoutConfirmation;
+  window.closeLogoutConfirmModal = closeLogoutConfirmModal;
+  window.ensureLogoutModalInBody = ensureLogoutModalInBody;
   window.submitHeaderLogout = submitHeaderLogout;
 </script>
 
-@if (auth()->guard('web')->check())
+@if (auth()->guard('web')->check() || auth()->check())
 <!-- Logout Confirmation Modal -->
-<div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true" style="z-index: 1065;">
+<div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true" style="z-index: 1000005;">
   <div class="modal-dialog modal-dialog-centered" style="max-width: 380px;">
-    <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden; background: #ffffff;">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden; background: #ffffff;">
       <div class="modal-body text-center p-4">
         <div class="mb-3 d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px; background-color: #fee2e2; color: #dc2626;">
           <span class="material-symbols-outlined" style="font-size: 32px;">logout</span>
@@ -1577,8 +1702,8 @@ body.sidebar-open {
         <h5 class="fw-bold text-dark mb-2 font18" id="logoutConfirmModalLabel">Log Out</h5>
         <p class="text-muted mb-4 font14">Are you sure you want to log out?</p>
         <div class="d-flex justify-content-center gap-2">
-          <button type="button" class="btn btn-light px-4 py-2 fw-semibold text-secondary" data-bs-dismiss="modal" style="border-radius: 8px; font-size: 14px; min-width: 105px; border: 1px solid #e2e8f0;">Cancel</button>
-          <button type="button" class="btn btn-danger px-4 py-2 fw-semibold" id="confirmLogoutModalBtn" onclick="submitHeaderLogout()" style="border-radius: 8px; font-size: 14px; min-width: 105px; background-color: #dc2626; border-color: #dc2626;">Yes</button>
+          <button type="button" class="btn btn-light px-4 py-2 fw-semibold text-secondary" data-bs-dismiss="modal" onclick="closeLogoutConfirmModal()" style="border-radius: 0 !important; font-size: 14px; min-width: 105px; border: 1px solid #e2e8f0;">Cancel</button>
+          <button type="button" class="btn btn-danger px-4 py-2 fw-semibold" id="confirmLogoutModalBtn" onclick="submitHeaderLogout()" style="border-radius: 0 !important; font-size: 14px; min-width: 105px; background-color: #dc2626; border-color: #dc2626;">Yes</button>
         </div>
       </div>
     </div>
