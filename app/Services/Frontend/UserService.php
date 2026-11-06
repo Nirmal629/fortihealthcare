@@ -139,6 +139,17 @@ class UserService
     if (password_verify($request->current_password, $user->password)) {
       $user->password = bcrypt($request->new_password);
       $user->save();
+
+      // Dispatch password changed notification email
+      try {
+        app('SendEmailService')->PasswordChanged($user);
+      } catch (\Throwable $e) {
+        \Illuminate\Support\Facades\Log::error('Password changed notification email failed: ' . $e->getMessage(), [
+          'user_id' => $user->id,
+          'email' => $user->email,
+        ]);
+      }
+
       return response()->json([
         'success' => true,
         'message' => 'Password updated successfully.'

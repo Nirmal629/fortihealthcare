@@ -232,6 +232,16 @@ class AuthService
 
     Verification::where('id', $verification->id)->delete();
 
+    // Dispatch password changed notification email
+    try {
+      app('SendEmailService')->PasswordChanged($user);
+    } catch (\Throwable $e) {
+      Log::error('Password changed notification email failed during reset: ' . $e->getMessage(), [
+        'user_id' => $user->id,
+        'email' => $user->email,
+      ]);
+    }
+
     return true;
   }
 }

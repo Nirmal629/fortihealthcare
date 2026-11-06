@@ -118,4 +118,52 @@ class SendEmailService
 
     return response()->json(['success' => true, 'message' => __('response.email.sent')]);
   }
+
+  /**
+   * Sends a Password Changed notification email to the user.
+   *
+   * @param User $user The user whose password was changed.
+   * @param array $params Optional additional parameters.
+   * @return void
+   */
+  public function PasswordChanged(User $user, array $params = []): void
+  {
+    if (empty($user->email)) {
+      return;
+    }
+
+    $template = 'emails.frontend.password-changed';
+    $appName = config('app.name', 'Fortier Healthcare');
+    $subject = 'Security Alert: Password Changed Successfully - ' . $appName;
+
+    $fullName = (!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+      ? $user->name
+      : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+        ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
+        : 'Valued Customer');
+
+    $viewData = array_merge([
+      'user' => $user,
+      'customerName' => $fullName,
+      'changedAt' => now()->timezone(config('app.timezone', 'Asia/Kolkata'))->format('d M Y, h:i A T'),
+      'deviceInfo' => request()->header('User-Agent') ?? 'Web Browser',
+      'ipAddress' => request()->ip() ?? 'Unknown',
+      'loginUrl' => route('signuplogin'),
+      'resetUrl' => route('password.request'),
+      'supportEmail' => config('app.support_email', 'fortiercustomersupport@gmail.com'),
+      'appName' => $appName,
+    ], $params);
+
+    $cc = [];
+    $bcc = [];
+
+    try {
+      app('EmailService')->sendEmail($user->email, $subject, $template, $viewData, $cc, $bcc);
+    } catch (\Throwable $e) {
+      \Illuminate\Support\Facades\Log::error('Failed to send password changed email to ' . $user->email . ': ' . $e->getMessage(), [
+        'user_id' => $user->id,
+        'error' => $e->getMessage(),
+      ]);
+    }
+  }
 }
