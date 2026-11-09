@@ -68,17 +68,21 @@
 
               </td>
             </tr>
+            <?php
+              $isCod = ($order->payment_method == 0 || strcasecmp((string)$order->payment_method, 'cod') === 0);
+              $isPaid = (!$isCod && (int)$order->payment_status === 1);
+            ?>
             <tr>
               <td style="font-size: 13px; color: #64748b;">Payment Method:</td>
               <td style="font-size: 13px; font-weight: 600; color: #0f172a;">
-                <?php echo e($order->payment_method == 0 ? 'Cash on Delivery (COD)' : 'Online Payment'); ?>
+                <?php echo e($isCod ? 'Cash on Delivery' : 'Online Payment'); ?>
 
               </td>
             </tr>
             <tr>
               <td style="font-size: 13px; color: #64748b;">Payment Status:</td>
-              <td style="font-size: 13px; font-weight: 600; color: #059669;">
-                <?php echo e($order->payment_status == 1 ? 'Paid' : 'Pending / On Delivery'); ?>
+              <td style="font-size: 13px; font-weight: 600; color: <?php echo e($isPaid ? '#059669' : '#d97706'); ?>;">
+                <?php echo e($isPaid ? 'Paid' : 'Payment Pending'); ?>
 
               </td>
             </tr>

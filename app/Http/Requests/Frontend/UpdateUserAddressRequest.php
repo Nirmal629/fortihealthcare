@@ -25,7 +25,7 @@ class UpdateUserAddressRequest extends BaseRequest
     return [
       'id' => 'nullable|exists:addresses,id',
       'state' => 'required|exists:states,id',
-      'pincode' => 'required|string|min:3|max:15',
+      'pincode' => ['required', 'string', 'regex:/^[1-9][0-9]{5}$/'],
       'address' => 'required|string|max:255',
       'landmark' => 'required|string|max:200',
       'name' => 'required|string|max:50',
@@ -49,8 +49,7 @@ class UpdateUserAddressRequest extends BaseRequest
 
       'pincode.required' => __('validation.required', ['attribute' => 'Pincode']),
       'pincode.string' => __('validation.string', ['attribute' => 'Pincode']),
-      'pincode.min' => __('validation.min', ['attribute' => 'Pincode', 'min' => 3]),
-      'pincode.max' => __('validation.max', ['attribute' => 'Pincode', 'max' => 15]),
+      'pincode.regex' => 'This is a PAN india company, deliveries restricted to India Only',
 
       'address.required' => __('validation.required', ['attribute' => 'Address']),
       'address.string' => __('validation.string', ['attribute' => 'Address']),

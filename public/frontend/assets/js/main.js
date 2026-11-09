@@ -84,6 +84,7 @@ function initLenis() {
     smooth: true,
     smoothTouch: false,
   });
+  window.lenis = scroll;
 
   scroll.on('scroll', ScrollTrigger.update);
 
@@ -94,16 +95,16 @@ function initLenis() {
   ScrollTrigger.refresh();
   gsap.ticker.lagSmoothing(0);
 
-  const modalElements = document.getElementsByClassName('genericmodal');
-  Array.from(modalElements).forEach((modalElement) => {
-    modalElement.addEventListener('shown.bs.modal', function () {
-      scroll.stop();
-      document.body.style.overflow = 'hidden';
-    });
-    modalElement.addEventListener('hidden.bs.modal', function () {
+  $(document).on('shown.bs.modal', '.modal', function () {
+    scroll.stop();
+    document.body.style.overflow = 'hidden';
+  });
+
+  $(document).on('hidden.bs.modal', '.modal', function () {
+    if ($('.modal.show').length === 0) {
       scroll.start();
       document.body.style.overflow = '';
-    });
+    }
   });
 
   const goToTopButton = document.getElementById('backtotop');
@@ -770,6 +771,30 @@ const accord = () => {
 /**
  * User Profile Dropdown (Click to toggle, click outside to close)
  */
+function closeUserProfileDropdown() {
+  var dropdowns = document.querySelectorAll('.user-header-dropdown');
+  dropdowns.forEach(function (dropdown) {
+    dropdown.classList.remove('show', 'hover-open');
+    var btn = dropdown.querySelector('#headerUserProfileDropdown, .user-profile-circle-btn');
+    if (btn) {
+      btn.classList.remove('show');
+      btn.setAttribute('aria-expanded', 'false');
+      if (window.bootstrap && window.bootstrap.Dropdown) {
+        try {
+          var bsDrop = window.bootstrap.Dropdown.getInstance(btn);
+          if (bsDrop && typeof bsDrop.hide === 'function') {
+            bsDrop.hide();
+          }
+        } catch (err) {}
+      }
+    }
+    var menu = dropdown.querySelector('.header-profile-menu');
+    if (menu) {
+      menu.classList.remove('show');
+    }
+  });
+}
+
 function initUserProfileDropdown() {
   if (window.__userProfileDropdownInitialized) return;
   window.__userProfileDropdownInitialized = true;
@@ -809,6 +834,8 @@ function initUserProfileDropdown() {
       e.stopPropagation();
       var isCurrentlyOpen = dropdown.classList.contains('show');
       toggleProfileMenu(!isCurrentlyOpen);
+    } else if (e.target.closest('.btn-trigger-logout, .header-profile-menu a, .header-profile-menu button')) {
+      toggleProfileMenu(false);
     } else if (!e.target.closest('.user-header-dropdown')) {
       toggleProfileMenu(false);
     }
@@ -823,13 +850,46 @@ function initUserProfileDropdown() {
 
 function promptLogoutConfirmation(e) {
   if (e) {
-    e.preventDefault();
-    e.stopPropagation();
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
   }
+
+  // 1. Immediately close user profile dropdown
+  closeUserProfileDropdown();
+  if (typeof closeHeaderProfileDropdown === 'function') {
+    closeHeaderProfileDropdown();
+  }
+
+  // 2. Immediately close mobile sidebar drawer if open
+  if (typeof closeCustomMobileSidebar === 'function') {
+    closeCustomMobileSidebar();
+  }
+
+  // 3. Ensure modal is in body and open cleanly
   var modalEl = document.getElementById('logoutConfirmModal');
-  if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
-    var logoutModal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-    logoutModal.show();
+  if (modalEl) {
+    if (modalEl.parentNode !== document.body) {
+      document.body.appendChild(modalEl);
+    }
+
+    if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      var logoutModal = (typeof bootstrap.Modal.getOrCreateInstance === 'function')
+        ? bootstrap.Modal.getOrCreateInstance(modalEl)
+        : (bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl));
+      logoutModal.show();
+      return;
+    }
+
+    if (window.jQuery && typeof window.jQuery(modalEl).modal === 'function') {
+      window.jQuery(modalEl).modal('show');
+      return;
+    }
+
+    modalEl.classList.add('show');
+    modalEl.style.display = 'block';
+    modalEl.setAttribute('aria-modal', 'true');
+    modalEl.removeAttribute('aria-hidden');
+    document.body.classList.add('modal-open');
   } else if (typeof swalConfirm === 'function') {
     swalConfirm('Log Out', 'Are you sure you want to log out?').then(function(result) {
       if (result && (result.isConfirmed || result.value)) {
@@ -850,6 +910,7 @@ function submitHeaderLogout() {
   }
 }
 
+window.closeUserProfileDropdown = closeUserProfileDropdown;
 window.initUserProfileDropdown = initUserProfileDropdown;
 window.promptLogoutConfirmation = promptLogoutConfirmation;
 window.submitHeaderLogout = submitHeaderLogout;

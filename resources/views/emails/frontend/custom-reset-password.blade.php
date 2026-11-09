@@ -47,7 +47,7 @@
             <tr>
               <td align="center" style="background: #2563eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
                 <a href="{{ $resetUrl }}" target="_blank" style="display: inline-block; padding: 14px 36px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 8px;">
-                  Choose New Password &rarr;
+                  Reset Password &rarr;
                 </a>
               </td>
             </tr>

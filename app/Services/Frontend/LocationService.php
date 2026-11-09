@@ -55,7 +55,17 @@ class LocationService
 
   public function checkPincode(Request $request): array
   {
-    $pincodeRecord = Pincode::where(['code' => $request->pincode, 'status' => true])->first();
+    $pincode = trim($request->pincode ?? '');
+    if (!preg_match('/^[1-9][0-9]{5}$/', $pincode)) {
+      return [
+        'success' => false,
+        'is_serviceable' => false,
+        'message' => 'This is a PAN india company, deliveries restricted to India Only',
+        'data' => null
+      ];
+    }
+
+    $pincodeRecord = Pincode::where(['code' => $pincode, 'status' => true])->first();
 
     return [
       'success' => true,
@@ -66,7 +76,7 @@ class LocationService
 
   public function getAddressModal(): array
   {
-    $states = State::all();
+    $states = State::getIndianStates();
 
     return [
       'html' => view('components.create-address-modal', compact('states'))->render()

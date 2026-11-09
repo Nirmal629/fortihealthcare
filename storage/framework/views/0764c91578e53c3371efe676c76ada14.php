@@ -93,7 +93,15 @@ unset($__defined_vars, $__key, $__value); ?>
             <label class="form-label">State <em>*</em></label>
             <select class="form-field form-select" name="state" id="state">
               <option value="" selected>Select State</option>
-              <?php $__empty_1 = true; $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+              <?php
+                $indianStates = (isset($states) && count($states) > 0)
+                  ? $states->filter(function($s) { return in_array($s->name, \App\Models\State::INDIAN_STATES); })->sortBy('name')
+                  : \App\Models\State::getIndianStates();
+                if ($indianStates->isEmpty()) {
+                  $indianStates = \App\Models\State::getIndianStates();
+                }
+              ?>
+              <?php $__empty_1 = true; $__currentLoopData = $indianStates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <option value="<?php echo e(Hashids::encode($state->id)); ?>"><?php echo e($state->name); ?></option>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <option value="">No states available</option>

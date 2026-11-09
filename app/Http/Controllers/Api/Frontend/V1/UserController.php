@@ -273,7 +273,7 @@ class UserController extends Controller
         'code' => $country->code,
       ] : null,
       'addresses' => AddressResource::collection(Address::where('user_id', user()->id)->get()),
-      'list_of_states' => StatesResource::collection(State::where([['status', 1], ['country_id', config('defaults.country_id')]])->get(['id', 'name']))
+      'list_of_states' => StatesResource::collection(State::getIndianStates(['id', 'name']))
     ];
 
     return ApiResponse::success($data, __('response.success.fetch', ['item' => 'User Address']), 200);

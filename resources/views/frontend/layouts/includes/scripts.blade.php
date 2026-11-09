@@ -17,7 +17,7 @@
 <script src="{{ asset('public/backend/assetss/js/jquery.validate.min.js') }}"></script>
 
 <!-- Custom Javascript -->
-<script type="text/javascript" src="{{ asset('public/frontend/assets/js/alert.js') }}"></script>
+<script type="text/javascript" src="{{ asset('public/frontend/assets/js/alert.js') }}?v={{ filemtime(public_path('frontend/assets/js/alert.js')) }}"></script>
 <script type="text/javascript" src="{{ asset('public/frontend/assets/js/main.js') }}?v={{ filemtime(public_path('frontend/assets/js/main.js')) }}"></script>
 
 {{-- Address Modal JS --}}
@@ -113,6 +113,20 @@
           return this.optional(element) || /^[a-zA-Z0-9\- ]+$/.test(value);
       }, "Only letters, numbers, hyphens, and spaces are allowed.");
 
+      $.validator.addMethod("indianPincode", function(value, element) {
+          const val = (value || '').trim();
+          if (this.optional(element)) {
+              return true;
+          }
+          const isValid = /^[1-9][0-9]{5}$/.test(val);
+          if (!isValid && val.length > 0) {
+              if (typeof window.showPanIndiaToast === 'function') {
+                  window.showPanIndiaToast();
+              }
+          }
+          return isValid;
+      }, "This is a PAN india company, deliveries restricted to India Only");
+
       $('#add_address_form').validate({
           rules: {
               name: {
@@ -125,9 +139,7 @@
               },
               pincode: {
                   required: true,
-                  minlength: 3,
-                  maxlength: 15,
-                  noSpecialChars: true
+                  indianPincode: true
               },
               state: {
                   required: true
@@ -152,9 +164,7 @@
               },
               pincode: {
                   required: "{{ __('validation.required', ['attribute' => 'Pincode']) }}",
-                  minlength: "{{ __('validation.minlength', ['attribute' => 'Pincode', 'max' => '3']) }}",
-                  maxlength: "{{ __('validation.maxlength', ['attribute' => 'Pincode', 'max' => '15']) }}",
-                  noSpecialChars: "Only letters, numbers, hyphens and spaces are allowed."
+                  indianPincode: "This is a PAN india company, deliveries restricted to India Only"
               },
               state: {
                   required: "{{ __('validation.required', ['attribute' => 'State']) }}"
@@ -228,9 +238,17 @@
         $('input[name="pincode"]').on('focusin', function() {
             $(this).parent('.form-element').addClass('has-value');
         });
-        $('input[name="pincode"]').on('focusout', function() {
-          if (!$(this).val()) {
+        $('input[name="pincode"]').on('focusout change input', function(e) {
+          const val = ($(this).val() || '').trim();
+          if (!val) {
             $(this).parent('.form-element').removeClass('has-value');
+          } else {
+            $(this).parent('.form-element').addClass('has-value');
+            if ((e.type === 'focusout' || e.type === 'change' || val.length >= 6) && !/^[1-9][0-9]{5}$/.test(val)) {
+              if (typeof window.showPanIndiaToast === 'function') {
+                window.showPanIndiaToast();
+              }
+            }
           }
         });
 

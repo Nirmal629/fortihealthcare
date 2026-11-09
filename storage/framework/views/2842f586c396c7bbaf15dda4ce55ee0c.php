@@ -502,15 +502,98 @@
   
   <script>
     (function() {
-      // Ensure html and body have overflow locked whenever any modal is opened
-      $(document).on('show.bs.modal shown.bs.modal', '.modal', function() {
+      // 1. Disable Bootstrap focus enforcer to allow full write access & smooth typing in all input fields
+      if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        bootstrap.Modal.prototype._enforceFocus = function() {};
+      }
+      if (window.jQuery && $.fn && $.fn.modal && $.fn.modal.Constructor) {
+        $.fn.modal.Constructor.prototype._enforceFocus = function() {};
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+      }
+
+      // 2. Before any modal shows: Move directly to body (avoid stacking traps) & set dynamic z-index
+      $(document).on('show.bs.modal', '.modal', function() {
+        var modalEl = this;
+
+        // Move modal to body so CSS transforms/filters on parent wrappers never trap it or block inputs
+        if (modalEl.id === 'searchModal') {
+          // Strictly lock outer search modal scroll
+          $(modalEl).css({
+            'overflow': 'hidden',
+            'overflow-y': 'hidden',
+            'overflow-x': 'hidden'
+          });
+        } else {
+          if (modalEl.parentNode !== document.body) {
+            document.body.appendChild(modalEl);
+          }
+        }
+
+        // Prevent Lenis smooth scroll from intercepting touch/wheel events inside modal
+        modalEl.setAttribute('data-lenis-prevent', 'true');
+        var modalDialog = modalEl.querySelector('.modal-dialog');
+        if (modalDialog) modalDialog.setAttribute('data-lenis-prevent', 'true');
+        var modalBody = modalEl.querySelector('.modal-body');
+        if (modalBody) modalBody.setAttribute('data-lenis-prevent', 'true');
+
+        // Stop page Lenis smooth scrolling while modal is active
+        if (window.lenis && typeof window.lenis.stop === 'function') {
+          window.lenis.stop();
+        }
+
+        // Calculate and apply dynamic z-index for stacking
+        var openModals = $('.modal.show').length;
+        var zIndex = 1060 + (openModals * 20);
+        $(modalEl).css('z-index', zIndex);
+
+        setTimeout(function() {
+          $('.modal-backdrop:not(.modal-stacked)').css('z-index', zIndex - 5).addClass('modal-stacked');
+        }, 0);
+
         $('html, body').addClass('modal-open').css('overflow', 'hidden');
       });
 
-      // Restore body overflow when all modals are closed
+      // 3. When modal is shown: Guarantee pointer events, focus/write access, and body scrolling
+      $(document).on('shown.bs.modal', '.modal', function() {
+        var $modal = $(this);
+        $('html, body').addClass('modal-open').css('overflow', 'hidden');
+
+        // Guarantee pointer-events and focus access on all interactive elements
+        $modal.find('.modal-content, .modal-body, .modal-dialog').css('pointer-events', 'auto');
+        $modal.find('input, select, textarea, button, a, label').css({
+          'pointer-events': 'auto',
+          'user-select': 'auto'
+        });
+
+        // Ensure scrolling: searchModal has strictly NO outer scroll (internal dropdown scroll only), other modals scroll body
+        if (this.id === 'searchModal') {
+          $(this).css({
+            'overflow': 'hidden',
+            'overflow-y': 'hidden',
+            'overflow-x': 'hidden'
+          });
+          var bodyEl = this.querySelector('.modal-body');
+          if (bodyEl) {
+            bodyEl.style.overflow = 'hidden';
+            bodyEl.style.overflowY = 'hidden';
+          }
+        } else {
+          var bodyEl = this.querySelector('.modal-body');
+          if (bodyEl) {
+            bodyEl.style.overflowY = 'auto';
+            bodyEl.style.webkitOverflowScrolling = 'touch';
+          }
+        }
+      });
+
+      // 4. On modal close: Restore page scroll & resume Lenis when all modals are closed
       $(document).on('hidden.bs.modal', '.modal', function() {
         if ($('.modal.show').length === 0) {
           $('html, body').removeClass('modal-open').css('overflow', '');
+          $('.modal-backdrop').remove();
+          if (window.lenis && typeof window.lenis.start === 'function') {
+            window.lenis.start();
+          }
         }
       });
     })();

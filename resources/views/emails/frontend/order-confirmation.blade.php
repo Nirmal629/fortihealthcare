@@ -68,16 +68,20 @@
                 {{ $order->created_at ? $order->created_at->format('d M Y, h:i A') : date('d M Y, h:i A') }}
               </td>
             </tr>
+            @php
+              $isCod = ($order->payment_method == 0 || strcasecmp((string)$order->payment_method, 'cod') === 0);
+              $isPaid = (!$isCod && (int)$order->payment_status === 1);
+            @endphp
             <tr>
               <td style="font-size: 13px; color: #64748b;">Payment Method:</td>
               <td style="font-size: 13px; font-weight: 600; color: #0f172a;">
-                {{ $order->payment_method == 0 ? 'Cash on Delivery (COD)' : 'Online Payment' }}
+                {{ $isCod ? 'Cash on Delivery' : 'Online Payment' }}
               </td>
             </tr>
             <tr>
               <td style="font-size: 13px; color: #64748b;">Payment Status:</td>
-              <td style="font-size: 13px; font-weight: 600; color: #059669;">
-                {{ $order->payment_status == 1 ? 'Paid' : 'Pending / On Delivery' }}
+              <td style="font-size: 13px; font-weight: 600; color: {{ $isPaid ? '#059669' : '#d97706' }};">
+                {{ $isPaid ? 'Paid' : 'Payment Pending' }}
               </td>
             </tr>
           </table>

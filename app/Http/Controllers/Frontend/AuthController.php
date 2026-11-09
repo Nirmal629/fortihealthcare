@@ -32,6 +32,7 @@ class AuthController extends Controller
 
     $data['title'] = 'Register';
     $data['showDisclaimer'] = false;
+    $data['login_page_banner'] = $this->bannerService->getBanner('login_page_banner', true);
     return view('frontend.pages.user.auth.register', $data);
   }
 
@@ -159,6 +160,7 @@ class AuthController extends Controller
     $data = [];
 
     $data['title'] = 'Login';
+    $data['login_page_banner'] = $this->bannerService->getBanner('login_page_banner', true);
 
     return view('frontend.pages.user.auth.login', $data);
   }

@@ -167,7 +167,7 @@
                       <li><hr class="dropdown-divider my-1"></li>
 
                       <li class="pb-2">
-                        <button type="button" class="dropdown-item d-flex align-items-center gap-2 px-3 py-2 text-danger font14 bg-transparent border-0 w-100 text-start btn-trigger-logout" style="cursor: pointer;" onclick="promptLogoutConfirmation(event)" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
+                        <button type="button" class="dropdown-item d-flex align-items-center gap-2 px-3 py-2 text-danger font14 bg-transparent border-0 w-100 text-start btn-trigger-logout" style="cursor: pointer;" onclick="promptLogoutConfirmation(event)">
                           <span class="material-symbols-outlined font20 text-danger">logout</span>
                           <span>Log Out</span>
                         </button>
@@ -299,7 +299,7 @@
             <span class="material-symbols-outlined">person</span>
             <span>My Profile</span>
           </a>
-          <button type="button" class="sidebar-footer-item text-danger border-0 bg-transparent w-100 text-start p-2 d-flex align-items-center gap-2" style="font-size: 0.92rem; cursor: pointer;" onclick="promptLogoutConfirmation(event)" data-bs-toggle="modal" data-bs-target="#logoutConfirmModal">
+          <button type="button" class="sidebar-footer-item text-danger border-0 bg-transparent w-100 text-start p-2 d-flex align-items-center gap-2" style="font-size: 0.92rem; cursor: pointer;" onclick="promptLogoutConfirmation(event)">
             <span class="material-symbols-outlined">logout</span>
             <span>Log Out</span>
           </button>
@@ -407,10 +407,10 @@ body.sidebar-open {
   display: block !important;
 }
 
-body.modal-open .modal-backdrop,
+/* body.modal-open .modal-backdrop,
 .modal-backdrop.logout-modal-backdrop {
   z-index: 1000000 !important;
-}
+} */
 
 /* Sidebar Header */
 .sidebar-drawer-header {
@@ -1544,6 +1544,30 @@ body.modal-open .modal-backdrop,
     }
   });
 
+  function closeHeaderProfileDropdown() {
+    var dropdowns = document.querySelectorAll('.user-header-dropdown');
+    dropdowns.forEach(function(dd) {
+      dd.classList.remove('show', 'hover-open');
+      var btn = dd.querySelector('#headerUserProfileDropdown, .user-profile-circle-btn');
+      if (btn) {
+        btn.classList.remove('show');
+        btn.setAttribute('aria-expanded', 'false');
+        if (window.bootstrap && window.bootstrap.Dropdown) {
+          try {
+            var bsDropdown = window.bootstrap.Dropdown.getInstance(btn);
+            if (bsDropdown && typeof bsDropdown.hide === 'function') {
+              bsDropdown.hide();
+            }
+          } catch (err) {}
+        }
+      }
+      var menu = dd.querySelector('.header-profile-menu');
+      if (menu) {
+        menu.classList.remove('show');
+      }
+    });
+  }
+
   function ensureLogoutModalInBody() {
     var modalEl = document.getElementById('logoutConfirmModal');
     if (modalEl && modalEl.parentNode !== document.body) {
@@ -1558,10 +1582,16 @@ body.modal-open .modal-backdrop,
       if (typeof e.stopPropagation === 'function') e.stopPropagation();
     }
 
-    // 1. Immediately close mobile sidebar drawer & backdrop without delay
+    // 1. Immediately close the user profile dropdown
+    closeHeaderProfileDropdown();
+    if (typeof closeUserProfileDropdown === 'function') {
+      closeUserProfileDropdown();
+    }
+
+    // 2. Immediately close mobile sidebar drawer & backdrop without delay
     closeCustomMobileSidebar();
 
-    // 2. Ensure modal is in body to avoid any parent container stacking context or transform trapping
+    // 3. Ensure modal is in body to avoid any parent container stacking context or transform trapping
     var modalEl = ensureLogoutModalInBody();
     if (!modalEl) {
       if (confirm('Are you sure you want to log out?')) {
@@ -1570,7 +1600,7 @@ body.modal-open .modal-backdrop,
       return;
     }
 
-    // 3. Open modal via Bootstrap 5 getOrCreateInstance / new instance
+    // 4. Open modal via Bootstrap 5 getOrCreateInstance / new instance
     try {
       if (window.bootstrap && window.bootstrap.Modal) {
         var modalInstance = (typeof window.bootstrap.Modal.getOrCreateInstance === 'function')
@@ -1583,13 +1613,13 @@ body.modal-open .modal-backdrop,
       console.warn('Bootstrap modal open error:', err);
     }
 
-    // 4. Fallback via jQuery modal
+    // 5. Fallback via jQuery modal
     if (window.jQuery && typeof window.jQuery(modalEl).modal === 'function') {
       window.jQuery(modalEl).modal('show');
       return;
     }
 
-    // 5. Native DOM Fallback
+    // 6. Native DOM Fallback
     modalEl.classList.add('show');
     modalEl.style.display = 'block';
     modalEl.setAttribute('aria-modal', 'true');
@@ -1651,6 +1681,10 @@ body.modal-open .modal-backdrop,
     var logoutModalEl = document.getElementById('logoutConfirmModal');
     if (logoutModalEl) {
       logoutModalEl.addEventListener('show.bs.modal', function() {
+        closeHeaderProfileDropdown();
+        if (typeof closeUserProfileDropdown === 'function') {
+          closeUserProfileDropdown();
+        }
         setTimeout(function() {
           var backdrops = document.querySelectorAll('.modal-backdrop');
           if (backdrops.length) {
@@ -1658,6 +1692,16 @@ body.modal-open .modal-backdrop,
             backdrops[backdrops.length - 1].style.zIndex = '1000000';
           }
         }, 10);
+      });
+      logoutModalEl.addEventListener('hidden.bs.modal', function() {
+        document.querySelectorAll('.logout-modal-backdrop, #manualLogoutBackdrop').forEach(function(b) {
+          b.remove();
+        });
+        if (document.querySelectorAll('.modal.show').length === 0) {
+          document.body.classList.remove('modal-open');
+          document.documentElement.classList.remove('modal-open');
+          document.body.style.overflow = '';
+        }
       });
       logoutModalEl.addEventListener('click', function(e) {
         if (e.target === logoutModalEl) {
@@ -1684,6 +1728,7 @@ body.modal-open .modal-backdrop,
   window.closeCustomMobileSidebar = closeCustomMobileSidebar;
   window.toggleSidebarServices = toggleSidebarServices;
   window.initHeaderProfileDropdown = initHeaderProfileDropdown;
+  window.closeHeaderProfileDropdown = closeHeaderProfileDropdown;
   window.promptLogoutConfirmation = promptLogoutConfirmation;
   window.closeLogoutConfirmModal = closeLogoutConfirmModal;
   window.ensureLogoutModalInBody = ensureLogoutModalInBody;

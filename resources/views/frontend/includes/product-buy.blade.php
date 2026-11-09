@@ -268,6 +268,19 @@
           return;
         }
 
+        if (!/^[1-9][0-9]{5}$/.test(pincode.trim())) {
+          $('.pincode-message')
+            .show()
+            .html('This is a PAN india company, deliveries restricted to India Only')
+            .css('color', '#ef4444');
+          $('.estimate_days').hide();
+          $('#cart-btn-wrapper').addClass('d-none');
+          if (typeof window.showPanIndiaToast === 'function') {
+            window.showPanIndiaToast();
+          }
+          return;
+        }
+
         $.ajax({
           url: "{{ route('pincode.check') }}",
           type: "POST",
@@ -291,7 +304,7 @@
             } else {
               $('.pincode-message')
                 .show()
-                .html('✕ Not serviceable at this pincode')
+                .html(response.message || '✕ Not serviceable at this pincode')
                 .css('color', '#ef4444');
               $('.estimate_days').hide();
               $('#cart-btn-wrapper').addClass('d-none');
@@ -310,6 +323,17 @@
         e.preventDefault();
         const pincode = $('#pincode').val();
         checkPincode(pincode);
+      });
+
+      $('#pincode').on('focusout change input', function(e) {
+        const val = ($(this).val() || '').trim();
+        if (val.length > 0) {
+          if ((e.type === 'focusout' || e.type === 'change' || val.length >= 6) && !/^[1-9][0-9]{5}$/.test(val)) {
+            if (typeof window.showPanIndiaToast === 'function') {
+              window.showPanIndiaToast();
+            }
+          }
+        }
       });
 
       const initialPincode = $('#pincode').val();

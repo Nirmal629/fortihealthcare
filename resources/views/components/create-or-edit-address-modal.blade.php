@@ -44,7 +44,15 @@
             <label class="form-label">State <em>*</em></label>
             <select class="form-field form-select" name="state" id="state">
               <option value="">Select State</option>
-              @forelse ($states as $state)
+              @php
+                $indianStates = (isset($states) && count($states) > 0)
+                  ? $states->filter(function($s) { return in_array($s->name, \App\Models\State::INDIAN_STATES); })->sortBy('name')
+                  : \App\Models\State::getIndianStates();
+                if ($indianStates->isEmpty()) {
+                  $indianStates = \App\Models\State::getIndianStates();
+                }
+              @endphp
+              @forelse ($indianStates as $state)
                 <option value="{{ Hashids::encode($state->id) }}"> {{ $state->name }}</option>
               @empty
               @endforelse
@@ -117,6 +125,31 @@
         return this.optional(element) || /^[a-zA-Z0-9\- ]+$/.test(value);
     }, "Only letters, numbers, hyphens, and spaces are allowed.");
 
+    $.validator.addMethod("indianPincode", function(value, element) {
+        const val = (value || '').trim();
+        if (this.optional(element)) {
+            return true;
+        }
+        const isValid = /^[1-9][0-9]{5}$/.test(val);
+        if (!isValid && val.length > 0) {
+            if (typeof window.showPanIndiaToast === 'function') {
+                window.showPanIndiaToast();
+            }
+        }
+        return isValid;
+    }, "This is a PAN india company, deliveries restricted to India Only");
+
+    $(document).on('focusout change input', '#address_add_edit_form input[name="pincode"]', function(e) {
+        const val = ($(this).val() || '').trim();
+        if (val.length > 0) {
+            if ((e.type === 'focusout' || e.type === 'change' || val.length >= 6) && !/^[1-9][0-9]{5}$/.test(val)) {
+                if (typeof window.showPanIndiaToast === 'function') {
+                    window.showPanIndiaToast();
+                }
+            }
+        }
+    });
+
     $(document).ready(function() {
       $('#address_add_edit_form').validate({
           rules: {
@@ -130,9 +163,7 @@
               },
               pincode: {
                   required: true,
-                  minlength: 3,
-                  maxlength: 15,
-                  noSpecialChars: true
+                  indianPincode: true
               },
               state: {
                   required: true
@@ -161,9 +192,7 @@
               },
               pincode: {
                   required: "{{ __('validation.required', ['attribute' => 'Pincode']) }}",
-                  minlength: "{{ __('validation.maxlength', ['attribute' => 'Pincode', 'max' => '3']) }}",
-                  maxlength: "{{ __('validation.maxlength', ['attribute' => 'Pincode', 'max' => '15']) }}",
-                  noSpecialChars: "Only letters, numbers, hyphens and spaces are allowed."
+                  indianPincode: "This is a PAN india company, deliveries restricted to India Only"
               },
               state: {
                   required: "{{ __('validation.required', ['attribute' => 'State']) }}"

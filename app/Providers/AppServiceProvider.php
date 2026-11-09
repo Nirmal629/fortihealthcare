@@ -56,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
 
       //pd($mega_menu_banner);
 
-      $states = State::all();
+      $states = State::getIndianStates();
       $view->with([
         'navMenus' => $menus,
         'siteSettings' => $siteSettings,

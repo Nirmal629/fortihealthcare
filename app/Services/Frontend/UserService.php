@@ -31,7 +31,7 @@ class UserService
   {
     return [
       'title'     => 'Address',
-      'states'    => State::all(),
+      'states'    => State::getIndianStates(),
       'addresses' => AddressResource::collection(Auth::user()->addresses),
     ];
   }

@@ -48,7 +48,15 @@
             <label class="form-label">State <em>*</em></label>
             <select class="form-field form-select" name="state" id="state">
               <option value="">Select State</option>
-              @forelse ($states as $state)
+              @php
+                $indianStates = (isset($states) && count($states) > 0)
+                  ? $states->filter(function($s) { return in_array($s->name, \App\Models\State::INDIAN_STATES); })->sortBy('name')
+                  : \App\Models\State::getIndianStates();
+                if ($indianStates->isEmpty()) {
+                  $indianStates = \App\Models\State::getIndianStates();
+                }
+              @endphp
+              @forelse ($indianStates as $state)
                 <option value="{{ Hashids::encode($state->id) }}"> {{ $state->name }}</option>
               @empty
               @endforelse

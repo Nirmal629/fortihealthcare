@@ -60,8 +60,8 @@
               class="c--primary">#{{ $order->order_number }}</span> is <br>confirmed. We'll update you shortly with
             packing and shipping details. </p>
           <div class="btnwrap">
-            <a href="{{ route('orders') }}" class="btn btn-outline-dark px-4 py-2">View All Orders</a>
-            <a href="{{ route('home') }}" class="btn btn-dark btn-lg px-4 py-2">Continue Shopping</a>
+            <a href="{{ route('orders') }}" class="btn custom-submit-btn learnmore_btn">View All Orders</a>
+            <a href="{{ route('home') }}" class="btn custom-submit-btn learnmore_btn">Continue Shopping</a>
           </div>
         </div>
       </div>

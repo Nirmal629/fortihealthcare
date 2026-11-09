@@ -1,19 +1,42 @@
 <div>
   <style>
-    /* Modern Searchable Dropdown Modal CSS */
-    #searchModal .modal-content {
-      border-radius: 20px !important;
-      border: 1px solid #e2e8f0 !important;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
-      overflow: hidden;
-      background: #ffffff !important;
+    /* Modern Searchable Dropdown Modal CSS - Strictly No Outer Scroll */
+    #searchModal,
+    div#searchModal {
+      overflow: hidden !important;
+      overflow-y: hidden !important;
+      overflow-x: hidden !important;
+      overscroll-behavior: none !important;
     }
     #searchModal .modal-dialog {
       max-width: 680px !important;
       margin: 2rem auto !important;
+      min-height: auto !important;
+      height: auto !important;
+      max-height: calc(100vh - 4rem) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+    }
+    #searchModal .modal-content {
+      border-radius: 20px !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+      overflow: hidden !important;
+      background: #ffffff !important;
+      max-height: calc(100vh - 4rem) !important;
+      display: flex !important;
+      flex-direction: column !important;
     }
     #searchModal .modal-body {
       padding: 0 !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      overflow-y: hidden !important;
+      overflow-x: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      flex: 1 1 auto !important;
     }
 
     /* Searchable Input Bar */
@@ -357,7 +380,7 @@
     }
   </style>
 
-  <div class="modal genericmodal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true" wire:ignore.self>
+  <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-body">

@@ -77,7 +77,7 @@
             <tr>
               <td style="font-size: 13px; color: #64748b;">Payment Method:</td>
               <td style="font-size: 13px; font-weight: 600; color: #0f172a;">
-                {{ $order->payment_method == 0 ? 'Cash on Delivery (COD)' : 'Online Payment' }}
+                {{ ($order->payment_method == 0 || strcasecmp((string)$order->payment_method, 'cod') === 0) ? 'Cash on Delivery' : 'Online Payment' }}
               </td>
             </tr>
           </table>

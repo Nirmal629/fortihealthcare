@@ -13,9 +13,19 @@
         <div class="col-lg-10 offset-lg-1">
           <div class="inswrp">
             <div class="left">
+              @php
+                $settings = json_decode($login_page_banner['settings'] ?? '{}', true);
+                $imageName = $settings['image'] ?? '';
+                $altText = $settings['alt_text'] ?? 'Login';
+
+                // Check if image exists, else use default
+                $imagePath = !empty($imageName)
+                    ? asset(config('defaults.banner_image_path') . $imageName)
+                    : asset('public/frontend/assets/img/home/signup_popup_thumb.jpg');
+              @endphp
+
               <figure class="mb-0">
-                <img src="{{ asset('public/frontend/assets/img/home/signup_popup_thumb.jpg') }}" alt="Login"
-                  title="Login" class="imageFit" />
+                <img src="{{ $imagePath }}" alt="{{ $altText }}" title="{{ $altText }}" class="imageFit" />
               </figure>
             </div>
             <div class="commonforms" id="login">

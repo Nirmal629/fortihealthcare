@@ -20,6 +20,54 @@ class State extends Model
   ];
 
   /**
+   * The list of 28 official Indian States.
+   */
+  public const INDIAN_STATES = [
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+  ];
+
+  /**
+   * Scope / query to retrieve strictly India's 28 states
+   */
+  public static function getIndianStates($columns = ['*'])
+  {
+    return self::where(function ($query) {
+      $query->where('country_id', 101)
+        ->orWhereIn('name', self::INDIAN_STATES);
+    })
+      ->whereIn('name', self::INDIAN_STATES)
+      ->orderBy('name', 'asc')
+      ->get($columns);
+  }
+
+  /**
    * Relationship: State belongs to a Country
    */
   public function country()
