@@ -141,6 +141,31 @@ unset($__defined_vars, $__key, $__value); ?>
       return this.optional(element) || /^[a-zA-Z0-9\- ]+$/.test(value);
     }, "Only letters, numbers, hyphens, and spaces are allowed.");
 
+    $.validator.addMethod("indianPincode", function(value, element) {
+      const val = (value || '').trim();
+      if (this.optional(element)) {
+        return true;
+      }
+      const isValid = /^[1-9][0-9]{5}$/.test(val);
+      if (!isValid && val.length > 0) {
+        if (typeof window.showPanIndiaToast === 'function') {
+          window.showPanIndiaToast();
+        }
+      }
+      return isValid;
+    }, "");
+
+    $(document).on('focusout change input', '#checkout_add_edit_address input[name="pincode"]', function(e) {
+      const val = ($(this).val() || '').trim();
+      if (val.length > 0) {
+        if ((e.type === 'focusout' || e.type === 'change' || val.length >= 6) && !/^[1-9][0-9]{5}$/.test(val)) {
+          if (typeof window.showPanIndiaToast === 'function') {
+            window.showPanIndiaToast();
+          }
+        }
+      }
+    });
+
     // Form validation and submission
     $('#checkout_add_edit_address').validate({
       rules: {
@@ -154,9 +179,7 @@ unset($__defined_vars, $__key, $__value); ?>
         },
         pincode: {
           required: true,
-          minlength: 3,
-          maxlength: 15,
-          noSpecialChars: true
+          indianPincode: true
         },
         state: {
           required: true
@@ -184,9 +207,7 @@ unset($__defined_vars, $__key, $__value); ?>
         },
         pincode: {
           required: "<?php echo e(__('validation.required', ['attribute' => 'Pincode'])); ?>",
-          minlength: "<?php echo e(__('validation.minlength', ['attribute' => 'Pincode', 'min' => '3'])); ?>",
-          maxlength: "<?php echo e(__('validation.maxlength', ['attribute' => 'Pincode', 'max' => '15'])); ?>",
-          noSpecialChars: "Only letters, numbers, hyphens and spaces are allowed."
+          indianPincode: ""
         },
         state: {
           required: "<?php echo e(__('validation.required', ['attribute' => 'State'])); ?>"
@@ -205,8 +226,17 @@ unset($__defined_vars, $__key, $__value); ?>
         }
       },
       errorElement: 'div',
-      errorPlacement: (error, element) => error.insertAfter($(`#${element.attr('id')}-error-container`).length ?
-        `#${element.attr('id')}-error-container` : element),
+      errorPlacement: function(error, element) {
+        if (element.attr('name') === 'pincode' && (!error.text().trim() || error.text().includes('PAN india'))) {
+          return;
+        }
+        let errorContainer = $(`#${element.attr('id')}-error-container`);
+        if (errorContainer.length) {
+          error.appendTo(errorContainer);
+        } else {
+          error.insertAfter(element);
+        }
+      },
       submitHandler: function(form) {
         $.ajax({
           url: "<?php echo e(route('user.create-or-update-address')); ?>",

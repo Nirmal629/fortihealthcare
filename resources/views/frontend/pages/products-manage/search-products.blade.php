@@ -1,9 +1,24 @@
 @extends('frontend.layouts.app')
 @php
   $fullQuery = request()->query();
-  // pd($priceRange);
+  $pageKeyword = $queryKeyword ?? ($fullQuery['q'] ?? null);
+  if (!empty($pageKeyword)) {
+      $pageTitle = 'Search Results for "' . $pageKeyword . '"';
+      $fallbackTitle = 'Search: ' . $pageKeyword . ' | Fortier Healthcare PVT. LTD.';
+      $fallbackDesc = 'Find products matching ' . $pageKeyword . ' at Fortier Healthcare PVT. LTD. Quality healthcare, medical, and wellness supplies online.';
+      $fallbackKeywords = $pageKeyword . ', healthcare products, search, Fortier Healthcare';
+  } else {
+      $pageTitle = 'All Products';
+      $fallbackTitle = 'All Products | Fortier Healthcare PVT. LTD.';
+      $fallbackDesc = 'Explore our full range of healthcare, wellness, and medical supplies at Fortier Healthcare PVT. LTD. Quality assured with delivery across India.';
+      $fallbackKeywords = 'all products, healthcare products, medical supplies, wellness items, Fortier Healthcare';
+  }
 @endphp
-@section('title', @$title)
+
+@section('title', $title ?? $pageTitle)
+@section('meta_title', $meta_title ?? $fallbackTitle)
+@section('meta_description', $meta_description ?? $fallbackDesc)
+@section('meta_keywords', $meta_keywords ?? $fallbackKeywords)
 
 @section('content')
   {{-- @include('frontend.includes.listing-banner') --}}

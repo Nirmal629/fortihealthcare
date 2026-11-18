@@ -246,7 +246,7 @@
                       <span class="material-symbols-outlined empty-icon">receipt_long</span>
                       <h4 class="font22 fw-bold text-dark mb-2">No Orders Found</h4>
                       <p class="text-muted font14 mb-4">You have not placed any orders yet. Start shopping and explore our collections!</p>
-                      <a href="<?php echo e(route('home')); ?>" class="btn custom-submit-btn learnmore_btn">
+                      <a href="<?php echo e(route('category.list')); ?>" class="btn custom-submit-btn learnmore_btn">
                         Start Shopping
                       </a>
                     </div>

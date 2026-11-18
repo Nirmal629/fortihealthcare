@@ -77,12 +77,14 @@ class OrderReturn extends Model
         'status'         => $order->order_status,
       ]);
 
-      // Deliver status email to customer
-      $order->sendStatusNotificationEmail($newStatus, [
-        'history' => $orderHistory,
-        'note' => $request->admin_reason ?? null,
-        'return_request' => $orderDetails,
-      ]);
+      // Deliver status email to customer asynchronously after response
+      dispatch(function () use ($order, $newStatus, $orderHistory, $request, $orderDetails) {
+        $order->sendStatusNotificationEmail($newStatus, [
+          'history' => $orderHistory,
+          'note' => $request->admin_reason ?? null,
+          'return_request' => $orderDetails,
+        ]);
+      })->afterResponse();
     }
 
     return $update

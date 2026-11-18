@@ -16,6 +16,9 @@
   $loginLink = !empty($loginUrl) ? $loginUrl : route('signuplogin');
   $resetLink = !empty($resetUrl) ? $resetUrl : route('password.request');
   $contactEmail = config('app.support_email', 'fortiercustomersupport@gmail.com');
+  if (empty($contactEmail) || str_contains($contactEmail, 'mediaclock')) {
+    $contactEmail = 'fortiercustomersupport@gmail.com';
+  }
 @endphp
 
 <tr>

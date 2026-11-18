@@ -184,10 +184,14 @@ class Order extends Model
     ]);
 
     // Send order status email to customer
-    $order->sendStatusNotificationEmail($decodedStatus, [
-      'history' => $orderHistory,
-      'note' => $data->description ?? null,
-    ]);
+    // Optimized: dispatch after response so admin submission responds in milliseconds without blocking the browser,
+    // while the email is sent reliably in the background
+    dispatch(function () use ($order, $decodedStatus, $orderHistory, $data) {
+      $order->sendStatusNotificationEmail($decodedStatus, [
+        'history' => $orderHistory,
+        'note' => $data->description ?? null,
+      ]);
+    })->afterResponse();
 
     return response()->json([
       'success' => true,
@@ -206,11 +210,19 @@ class Order extends Model
   public function sendStatusNotificationEmail(?int $status = null, array $extraData = []): bool
   {
     $status = $status ?? $this->order_status;
-    $this->loadMissing(['user', 'orderProducts.variant.product']);
+    $this->loadMissing(['user', 'orderProducts.variant.product', 'orderHistories']);
 
     $user = $this->user;
-    if (!$user || empty($user->email)) {
-      Log::warning("Order #{$this->order_number} has no associated user email for status notification.");
+    $recipientEmail = $user?->email;
+
+    if (empty($recipientEmail)) {
+      $shipping = is_array($this->shipping_address) ? $this->shipping_address : json_decode($this->shipping_address, true);
+      $billing = is_array($this->billing_address) ? $this->billing_address : json_decode($this->billing_address, true);
+      $recipientEmail = $shipping['email'] ?? ($billing['email'] ?? null);
+    }
+
+    if (empty($recipientEmail)) {
+      Log::warning("Order #{$this->order_number} has no associated recipient email for status notification.");
       return false;
     }
 
@@ -228,8 +240,8 @@ class Order extends Model
         'subject' => "Your Order Has Been Cancelled - #{$this->order_number}",
       ],
       OrderStatus::SHIPPED => [
-        'view' => 'emails.frontend.order-shipped',
-        'subject' => "Your Order Has Been Shipped - #{$this->order_number}",
+        'view' => 'emails.frontend.order-delivered',
+        'subject' => "Your Order Has Been Delivered - #{$this->order_number}",
       ],
       OrderStatus::DELIVERED => [
         'view' => 'emails.frontend.order-delivered',
@@ -253,9 +265,9 @@ class Order extends Model
     $subject = $templateMap[$status]['subject'];
 
     // Resolve the customer's registered name filled upon registration
-    $registeredName = (!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+    $registeredName = (!empty($user?->name) && strcasecmp(trim($user->name), 'guest') !== 0)
       ? $user->name
-      : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+      : ((!empty($user?->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
         ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
         : null);
 
@@ -281,7 +293,7 @@ class Order extends Model
       }
 
       app('EmailService')->sendEmail(
-        $user->email,
+        $recipientEmail,
         $subject,
         $view,
         $data,

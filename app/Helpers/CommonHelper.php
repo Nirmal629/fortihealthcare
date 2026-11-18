@@ -54,21 +54,26 @@ if (!function_exists('getUserAgentInfo')) {
 if (! function_exists('userNameById')) {
   function userNameById($guard = null, $id = 0)
   {
-    if (!Schema::hasTable('admins')) {
-      return null; // Return a default value instead of crashing
+    if (!Schema::hasTable('admins') || empty($id)) {
+      return 'N/A';
     }
     $name = $guard == 'admin' ?
       Admin::where('id', $id)->first(['first_name', 'middle_name', 'last_name']) :
       User::where('id', $id)->first(['first_name', 'middle_name', 'last_name']);
 
-    return $name->first_name . ' ' . $name->middle_name . ' ' . $name->last_name;
+    if (!$name) {
+      return 'N/A';
+    }
+
+    $fullName = trim($name->first_name . ' ' . ($name->middle_name ?? '') . ' ' . ($name->last_name ?? ''));
+    return !empty($fullName) ? $fullName : 'N/A';
   }
 }
 
 if (! function_exists('userDetailById')) {
   function userDetailById($guard = null, $id = 0)
   {
-    if (!Schema::hasTable('admins'))
+    if (!Schema::hasTable('admins') || empty($id))
       return null;
 
     $detail = $guard == 'admin' ?
@@ -156,19 +161,23 @@ if (!function_exists('userImageById')) {
   function userImageById($guard = null, $id = 0)
   {
     if (!Schema::hasTable('admins')) {
-      return null; // Prevent crash if table doesn't exist
+      return [
+        'image'     => asset('public/backend/assetss/images/users/avatar-1.jpg'),
+        'thumbnail' => asset('public/backend/assetss/images/users/avatar-1.jpg'),
+      ];
     }
 
-    $user = $guard == 'admin'
-      ? Admin::where('id', $id)->first(['avatar', 'first_name', 'last_name'])
-      : User::where('id', $id)->first(['avatar', 'first_name', 'last_name']);
+    $user = null;
+    if (!empty($id)) {
+      $user = $guard == 'admin'
+        ? Admin::where('id', $id)->first(['avatar', 'first_name', 'last_name'])
+        : User::where('id', $id)->first(['avatar', 'first_name', 'last_name']);
+    }
 
     $imageName = $user ? $user->avatar : null;
 
     if ($imageName) {
-    //   $imagePath = 'public/storage/uploads/' . $guard . '/profile/' . $imageName;
-    //   $thumbnailPath = 'public/storage/uploads/' . $guard . '/profile/thumbnail/' . $imageName;
-    $imagePath = 'public/uploads/' . $guard . '/profile/' . $imageName;
+      $imagePath = 'public/uploads/' . $guard . '/profile/' . $imageName;
       $thumbnailPath = 'public/uploads/' . $guard . '/profile/thumbnail/' . $imageName;
 
       return [
@@ -177,10 +186,10 @@ if (!function_exists('userImageById')) {
       ];
     } else {
       // Handle initials if image not found
-      $firstName = $user->first_name ?? 'N';
-      $lastName = $user->last_name ?? null;
+      $firstName = $user ? $user->first_name : 'N';
+      $lastName = $user ? $user->last_name : null;
 
-      $initials = strtoupper(mb_substr($firstName, 0, 1));
+      $initials = strtoupper(mb_substr($firstName ?? 'N', 0, 1));
       if (!empty($lastName)) {
         $initials .= strtoupper(mb_substr($lastName, 0, 1));
       }
@@ -204,19 +213,23 @@ if (!function_exists('userAvtarImageById')) {
   function userAvtarImageById($guard = null, $id = 0)
   {
     if (!Schema::hasTable('admins')) {
-      return null; // Prevent crash if table doesn't exist
+      return [
+        'image'     => asset('public/backend/assetss/images/users/avatar-1.jpg'),
+        'thumbnail' => asset('public/backend/assetss/images/users/avatar-1.jpg'),
+      ];
     }
 
-    $user = $guard == 'admin'
-      ? Admin::where('id', $id)->first(['image', 'first_name', 'last_name'])
-      : User::where('id', $id)->first(['image', 'first_name', 'last_name']);
+    $user = null;
+    if (!empty($id)) {
+      $user = $guard == 'admin'
+        ? Admin::where('id', $id)->first(['image', 'first_name', 'last_name'])
+        : User::where('id', $id)->first(['image', 'first_name', 'last_name']);
+    }
 
     $imageName = $user ? $user->image : null;
 
     if ($imageName) {
-    //   $imagePath = 'public/storage/uploads/' . $guard . '/profile/' . $imageName;
-    //   $thumbnailPath = 'public/storage/uploads/' . $guard . '/profile/thumbnail/' . $imageName;
-    $imagePath = 'public/uploads/' . $guard . '/profile/' . $imageName;
+      $imagePath = 'public/uploads/' . $guard . '/profile/' . $imageName;
       $thumbnailPath = 'public/uploads/' . $guard . '/profile/thumbnail/' . $imageName;
 
       return [
@@ -225,10 +238,10 @@ if (!function_exists('userAvtarImageById')) {
       ];
     } else {
       // Handle initials if image not found
-      $firstName = $user->first_name ?? 'N';
-      $lastName = $user->last_name ?? null;
+      $firstName = $user ? $user->first_name : 'N';
+      $lastName = $user ? $user->last_name : null;
 
-      $initials = strtoupper(mb_substr($firstName, 0, 1));
+      $initials = strtoupper(mb_substr($firstName ?? 'N', 0, 1));
       if (!empty($lastName)) {
         $initials .= strtoupper(mb_substr($lastName, 0, 1));
       }

@@ -147,7 +147,7 @@
     </div>
     <h3>Your Cart is Empty</h3>
     <p>Looks like you haven't added any products to your shopping cart yet.</p>
-    <a href="<?php echo e(route('home')); ?>" class="learnmore_btn">
+    <a href="<?php echo e(route('category.list')); ?>" class="learnmore_btn">
       Start Shopping
     </a>
   </div>

@@ -5,8 +5,30 @@
 
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<meta content="" name="keywords">
-<meta content="" name="description">
+<?php
+  $headMetaTitle = trim($__env->yieldContent('meta_title', $meta_title ?? ''));
+  if (empty($headMetaTitle)) {
+      $rawTitle = trim($__env->yieldContent('title', $title ?? ''));
+      if (str_contains($rawTitle, 'Fortier Healthcare')) {
+          $headMetaTitle = $rawTitle;
+      } else {
+          $headMetaTitle = $rawTitle !== '' ? ($rawTitle . ' | Fortier Healthcare PVT. LTD.') : 'Fortier Healthcare PVT. LTD.';
+      }
+  }
+
+  $headMetaDesc = trim($__env->yieldContent('meta_description', $meta_description ?? ($meta_desc ?? '')));
+  if (empty($headMetaDesc)) {
+      $headMetaDesc = 'Fortier Healthcare PVT. LTD. - Quality healthcare, medical supplies, and wellness products online.';
+  }
+
+  $headMetaKeywords = trim($__env->yieldContent('meta_keywords', $meta_keywords ?? ''));
+?>
+<meta name="keywords" content="<?php echo e(strip_tags($headMetaKeywords)); ?>">
+<meta name="description" content="<?php echo e(strip_tags($headMetaDesc)); ?>">
+<meta property="og:title" content="<?php echo e(strip_tags($headMetaTitle)); ?>">
+<meta property="og:description" content="<?php echo e(strip_tags($headMetaDesc)); ?>">
+<meta property="og:type" content="website">
+<meta property="og:url" content="<?php echo e(url()->current()); ?>">
 
 <link rel="shortcut icon" href="<?php echo e(asset('public/favicon.ico')); ?>">
 <link rel="icon" type="image/png" sizes="16x16"

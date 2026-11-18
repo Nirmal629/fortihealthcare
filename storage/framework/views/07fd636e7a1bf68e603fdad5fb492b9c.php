@@ -88,7 +88,7 @@
               <td class=" updatedby">
                 <div class="thumb">
                   <span class="account-user-avatar">
-                    <img src=<?php echo e(userImageById('admin', $role->created_by)['thumbnail']); ?> alt="user-image"
+                    <img src="<?php echo e(userImageById('admin', $role->created_by)['thumbnail']); ?>" alt="user-image"
                       width="32" class="rounded-circle">
                   </span>
                   <div class="inf">
@@ -101,7 +101,7 @@
               <td class=" updatedby">
                 <div class="thumb">
                   <span class="account-user-avatar">
-                    <img src=<?php echo e(userImageById('admin', $role->updated_by)['thumbnail']); ?> alt="user-image"
+                    <img src="<?php echo e(userImageById('admin', $role->updated_by)['thumbnail']); ?>" alt="user-image"
                       width="32" class="rounded-circle">
                   </span>
                   <div class="inf">

@@ -1,6 +1,20 @@
 <?php
   $image1 = config('defaults.contact_us_image1');
   $image2 = config('defaults.contact_us_image2');
+
+  $getInTouchBanner = \App\Models\CustomBanner::whereIn('position', ['get_in_touch', 'contact', 'getintouch'])
+    ->where('status', 1)
+    ->first();
+  $bannerImage = null;
+  if ($getInTouchBanner && !empty($getInTouchBanner->settings)) {
+    $settings = is_array($getInTouchBanner->settings) ? $getInTouchBanner->settings : json_decode($getInTouchBanner->settings, true);
+    if (!empty($settings['image'])) {
+      $bannerImage = asset('public/uploads/banners/' . $settings['image']);
+    }
+  }
+  if (!$bannerImage) {
+    $bannerImage = asset('public/frontend/assets/img/home/hero_banner.png');
+  }
 ?>
 <main class="pg_contact">
   <section class="getIntouch custom-get-in-touch pt-4 pb-4 pt-lg-5 pb-lg-5">
@@ -11,7 +25,7 @@
           <div class="git-left-panel">
             <div class="git-visual-wrapper">
               <figure class="m-0 position-relative get-intouchimage_fig">
-                <img src="<?php echo e(!empty($page->feature_image) ? asset('public/uploads/cms_pages/' . $page->feature_image) : asset('public/frontend/assets/img/contact/banner.webp')); ?>"
+                <img src="<?php echo e($bannerImage); ?>"
                     alt="<?php echo e($page->title ?? 'Contact Fortier Healthcare'); ?>" title="<?php echo e($page->title ?? 'Contact Fortier Healthcare'); ?>" class="git-banner-img img-fluid w-100" />
                 <div class="git-visual-badge">
                   <span class="material-symbols-outlined">verified</span>

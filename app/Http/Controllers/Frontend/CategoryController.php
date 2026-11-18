@@ -16,7 +16,10 @@ class CategoryController extends Controller
     return view(
       'frontend.pages.categories.index',
       [
-        'title' => 'Categories',
+        'title' => 'All Categories',
+        'meta_title' => 'All Categories | Fortier Healthcare PVT. LTD.',
+        'meta_description' => 'Explore all healthcare, medical supplies, and wellness product categories at Fortier Healthcare PVT. LTD. Find high-quality products for all your healthcare needs.',
+        'meta_keywords' => 'categories, healthcare categories, medical products, wellness products, healthcare supplies, Fortier Healthcare',
 
         'productCategories' => $this->categoryService->getCategoriesWithProducts(4, 'latest'),
         'popularCategories' => $this->categoryService->getCategoriesWithProducts(8),
@@ -96,6 +99,13 @@ class CategoryController extends Controller
 
     $products = $this->categoryService->getDisplayProducts($category);
 
+    $categoryTitle = $category->title ?? 'Category';
+    $catMetaTitle = !empty($category->meta_title) ? $category->meta_title : ($categoryTitle . ' | Fortier Healthcare PVT. LTD.');
+    $catMetaDesc = !empty($category->meta_desc) 
+      ? $category->meta_desc 
+      : ('Shop ' . $categoryTitle . ' products online at best prices from Fortier Healthcare PVT. LTD. Explore high-quality healthcare and wellness items.');
+    $catMetaKeywords = !empty($category->meta_keywords) ? $category->meta_keywords : ($categoryTitle . ', healthcare products, Fortier Healthcare');
+
     return view('frontend.pages.categories.show', array_merge(
       $this->categoryService->prepareViewData($category, $products, $request, $actualSlug),
       [
@@ -103,7 +113,10 @@ class CategoryController extends Controller
         'category_slug' => $category->slug ?? '',
         'category' => $category,
         'childCategories' => $childCategories,
-        'title' => $category->title ?? ''
+        'title' => $categoryTitle,
+        'meta_title' => $catMetaTitle,
+        'meta_description' => $catMetaDesc,
+        'meta_keywords' => $catMetaKeywords,
       ]
     ));
   }

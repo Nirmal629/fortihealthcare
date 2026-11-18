@@ -7,7 +7,18 @@
   @stack('component-styles')
   @stack('styles')
 
-  <title>@yield('title', 'E-Commerce') | Fortier Healthcare PVT. LTD.</title>
+  @php
+    $appMetaTitle = trim($__env->yieldContent('meta_title', $meta_title ?? ''));
+    if (empty($appMetaTitle)) {
+        $appTitle = trim($__env->yieldContent('title', $title ?? 'E-Commerce'));
+        if (str_contains($appTitle, 'Fortier Healthcare')) {
+            $appMetaTitle = $appTitle;
+        } else {
+            $appMetaTitle = $appTitle !== '' ? ($appTitle . ' | Fortier Healthcare PVT. LTD.') : 'Fortier Healthcare PVT. LTD.';
+        }
+    }
+  @endphp
+  <title>{{ strip_tags($appMetaTitle) }}</title>
 
   <style>
     .error {

@@ -5,14 +5,14 @@
   $shipping = is_array($order->shipping_address) ? $order->shipping_address : json_decode($order->shipping_address, true);
   $resolvedCustomerName = (!empty($customerName) && strcasecmp(trim($customerName), 'guest') !== 0)
     ? $customerName
-    : ((!empty($user->name) && strcasecmp(trim($user->name), 'guest') !== 0)
+    : ((!empty($user?->name) && strcasecmp(trim($user->name), 'guest') !== 0)
       ? $user->name
-      : ((!empty($user->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
+      : ((!empty($user?->first_name) && strcasecmp(trim($user->first_name), 'guest') !== 0)
         ? trim($user->first_name . ' ' . ($user->last_name ?? ''))
         : ((!empty($shipping['name']) && strcasecmp(trim($shipping['name']), 'guest') !== 0)
           ? $shipping['name']
           : 'Valued Customer')));
-  $scheduledDate = !empty($history->scheduled_date) ? \Carbon\Carbon::parse($history->scheduled_date)->format('d M Y') : null;
+  $scheduledDate = !empty($history?->scheduled_date) ? \Carbon\Carbon::parse($history->scheduled_date)->format('d M Y') : null;
 @endphp
 <tr>
   <td class="mobile-padding" style="padding: 36px 40px 32px;">
@@ -99,7 +99,7 @@
           <table border="0" cellpadding="6" cellspacing="0" width="100%">
             @foreach($order->orderProducts as $item)
             @php
-              $itemName = $item->variant->name ?? ($item->variant->product->name ?? ($item->sku ?? 'Product Item'));
+              $itemName = $item->variant?->name ?? ($item->variant?->product?->name ?? ($item->sku ?? 'Product Item'));
               $unitPrice = $item->sell_price ?? ($item->regular_price ?? 0);
               $lineTotal = $unitPrice * ($item->quantity ?? 1);
             @endphp
@@ -142,7 +142,7 @@
           <table border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
             <tr>
               <td align="center" style="background: #2563eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-                <a href="{{ route('order.tracking', ['order_number' => $order->order_number]) }}" target="_blank" style="display: inline-block; padding: 14px 36px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 8px;">
+                <a href="{{ Route::has('order.tracking') ? route('order.tracking', ['order_number' => $order->order_number]) : url('/orders') }}" target="_blank" style="display: inline-block; padding: 14px 36px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; font-weight: 700; color: #ffffff; text-decoration: none; border-radius: 8px;">
                   Track Your Shipment &rarr;
                 </a>
               </td>

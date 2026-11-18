@@ -106,7 +106,7 @@
         }
       }
       return isValid;
-    }, "This is a PAN india company, deliveries restricted to India Only");
+    }, "");
 
     $(document).on('focusout change input', '#checkout_add_edit_address input[name="pincode"]', function(e) {
       const val = ($(this).val() || '').trim();
@@ -160,7 +160,7 @@
         },
         pincode: {
           required: "{{ __('validation.required', ['attribute' => 'Pincode']) }}",
-          indianPincode: "This is a PAN india company, deliveries restricted to India Only"
+          indianPincode: ""
         },
         state: {
           required: "{{ __('validation.required', ['attribute' => 'State']) }}"
@@ -179,8 +179,17 @@
         }
       },
       errorElement: 'div',
-      errorPlacement: (error, element) => error.insertAfter($(`#${element.attr('id')}-error-container`).length ?
-        `#${element.attr('id')}-error-container` : element),
+      errorPlacement: function(error, element) {
+        if (element.attr('name') === 'pincode' && (!error.text().trim() || error.text().includes('PAN india'))) {
+          return;
+        }
+        let errorContainer = $(`#${element.attr('id')}-error-container`);
+        if (errorContainer.length) {
+          error.appendTo(errorContainer);
+        } else {
+          error.insertAfter(element);
+        }
+      },
       submitHandler: function(form) {
         $.ajax({
           url: "{{ route('user.create-or-update-address') }}",

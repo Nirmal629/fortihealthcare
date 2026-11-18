@@ -69,6 +69,9 @@
     $rawAppName = config('app.name', 'Fortier Healthcare');
     $appName = ($rawAppName === 'Laravel' || $rawAppName === 'Maroon Crane') ? 'Fortier Healthcare' : ucwords(strtolower($rawAppName));
     $supportEmail = config('app.support_email', 'fortiercustomersupport@gmail.com');
+    if (empty($supportEmail) || str_contains($supportEmail, 'mediaclock')) {
+      $supportEmail = 'fortiercustomersupport@gmail.com';
+    }
     $appUrl = config('app.url', '#');
   ?>
 

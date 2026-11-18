@@ -26,7 +26,8 @@ class RolesTable extends BaseComponent
   }
   public function getQuery($filtered = false)
   {
-    $query = Roles::where('id', '>', user('admin')->role_id)->orderBy($this->sortColumn, $this->sortDirection);
+    $adminRoleId = user('admin')->role_id ?? 0;
+    $query = Roles::where('id', '>', $adminRoleId)->orderBy($this->sortColumn, $this->sortDirection);
 
     if ($filtered) {
       $query->search($this->search)

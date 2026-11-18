@@ -117,8 +117,21 @@ class ProductController extends Controller
     $isInCart = isInCart($productVariant->id, false);
     $isInWishlist = isInCart($productVariant->id, true);
 
+    $productName = $productVariant->name ?? ($productVariant->product->name ?? 'Product Details');
+    $rawDesc = $productVariant->product->description ?? ($productVariant->product->product_details ?? '');
+    $cleanDesc = trim(preg_replace('/\s+/', ' ', strip_tags(html_entity_decode($rawDesc, ENT_QUOTES, 'UTF-8'))));
+    $productMetaDesc = !empty($cleanDesc)
+      ? Str::limit($cleanDesc, 160)
+      : ('Buy ' . $productName . ' online at best price from Fortier Healthcare PVT. LTD. Fast pan-India delivery on healthcare and wellness products.');
+    $productMetaTitle = $productName . ' | Fortier Healthcare PVT. LTD.';
+    $categoryTitle = $category->title ?? ($productVariant->category->title ?? '');
+    $productKeywords = implode(', ', array_filter([$productName, $categoryTitle, 'Fortier Healthcare', 'buy online', 'healthcare']));
+
     return view('frontend.pages.products-manage.show', [
-      'title' => $productVariant->name ?? 'Product Details',
+      'title' => $productName,
+      'meta_title' => $productMetaTitle,
+      'meta_description' => $productMetaDesc,
+      'meta_keywords' => $productKeywords,
       'productVariant' => $productVariant,
       'category' => $category,
       'parentCategories' => $parentCategories,
@@ -238,7 +251,19 @@ class ProductController extends Controller
             return isset($settings['single_option']) && $settings['single_option'] == $targetCategoryId;
         });
 
+      $productName = $product->name ?? 'Products';
+      $cleanDesc = trim(preg_replace('/\s+/', ' ', strip_tags(html_entity_decode($product->description ?? $product->product_details ?? '', ENT_QUOTES, 'UTF-8'))));
+      $productMetaDesc = !empty($cleanDesc)
+        ? Str::limit($cleanDesc, 160)
+        : ('Shop ' . $productName . ' and all related products online at Fortier Healthcare PVT. LTD.');
+      $productMetaTitle = $productName . ' | Fortier Healthcare PVT. LTD.';
+      $productKeywords = implode(', ', array_filter([$productName, optional($category)->title, 'Fortier Healthcare', 'all products']));
+
       return view('frontend.pages.products-manage.index', [
+        'title' => $productName,
+        'meta_title' => $productMetaTitle,
+        'meta_description' => $productMetaDesc,
+        'meta_keywords' => $productKeywords,
         'product' => $product,
         'variants' => $paginatedVariants,
         'queryKeyword' => $params['q'] ?? null,
@@ -250,7 +275,24 @@ class ProductController extends Controller
       ]);
     }
 
+    $queryKeyword = $params['q'] ?? null;
+    if (!empty($queryKeyword)) {
+      $searchTitle = 'Search Results for "' . $queryKeyword . '"';
+      $searchMetaTitle = 'Search: ' . $queryKeyword . ' | Fortier Healthcare PVT. LTD.';
+      $searchMetaDesc = 'Find products matching ' . $queryKeyword . ' at Fortier Healthcare PVT. LTD. Quality healthcare, medical, and wellness supplies online.';
+      $searchKeywords = $queryKeyword . ', healthcare products, search, Fortier Healthcare';
+    } else {
+      $searchTitle = 'All Products';
+      $searchMetaTitle = 'All Products | Fortier Healthcare PVT. LTD.';
+      $searchMetaDesc = 'Explore our full range of healthcare, wellness, and medical supplies at Fortier Healthcare PVT. LTD. Quality assured with delivery across India.';
+      $searchKeywords = 'all products, healthcare products, medical supplies, wellness items, Fortier Healthcare';
+    }
+
     return view('frontend.pages.products-manage.search-products', [
+      'title' => $searchTitle,
+      'meta_title' => $searchMetaTitle,
+      'meta_description' => $searchMetaDesc,
+      'meta_keywords' => $searchKeywords,
       'variants' => $paginatedVariants,
       'queryKeyword' => $params['q'] ?? null,
       'productCategories' => $productCategories,

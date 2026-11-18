@@ -1,5 +1,21 @@
 @extends('frontend.layouts.app')
 
+@php
+  $getInTouchBanner = \App\Models\CustomBanner::whereIn('position', ['get_in_touch', 'contact', 'getintouch'])
+    ->where('status', 1)
+    ->first();
+  $bannerImage = null;
+  if ($getInTouchBanner && !empty($getInTouchBanner->settings)) {
+    $settings = is_array($getInTouchBanner->settings) ? $getInTouchBanner->settings : json_decode($getInTouchBanner->settings, true);
+    if (!empty($settings['image'])) {
+      $bannerImage = asset('public/uploads/banners/' . $settings['image']);
+    }
+  }
+  if (!$bannerImage) {
+    $bannerImage = asset('public/frontend/assets/img/home/hero_banner.png');
+  }
+@endphp
+
 @section('title', @$title)
 @section('content')
   <main class="pg_contact">
@@ -8,8 +24,8 @@
         <div class="inner-container">
           <div class="row justify-content-between">
             <div class="left image col-lg-5">
-              <figure><img src="{{ asset('public/frontend/assets/img/contact/banner.webp') }}" alt="Mayuri"
-                  title="Mayuri" />
+              <figure><img src="{{ $bannerImage }}" alt="Get In Touch"
+                  title="Get In Touch" class="img-fluid w-100" style="object-fit: cover;" />
               </figure>
             </div>
             <div class="content col-lg-6">

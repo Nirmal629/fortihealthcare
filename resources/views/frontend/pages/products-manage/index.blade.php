@@ -27,7 +27,20 @@
     }
   </style>
 @endpush
-@section('title', @$title)
+@php
+  $pageTitle = $title ?? ($product->name ?? 'Products');
+  $cleanDesc = trim(preg_replace('/\s+/', ' ', strip_tags(html_entity_decode($product->description ?? $product->product_details ?? '', ENT_QUOTES, 'UTF-8'))));
+  $fallbackDesc = !empty($cleanDesc)
+      ? \Illuminate\Support\Str::limit($cleanDesc, 160)
+      : ('Shop ' . $pageTitle . ' and all related products online at Fortier Healthcare PVT. LTD.');
+  $fallbackTitle = $pageTitle . ' | Fortier Healthcare PVT. LTD.';
+  $fallbackKeywords = implode(', ', array_filter([$pageTitle, optional($product->category)->title, 'Fortier Healthcare', 'all products']));
+@endphp
+
+@section('title', $pageTitle)
+@section('meta_title', $meta_title ?? $fallbackTitle)
+@section('meta_description', $meta_description ?? $fallbackDesc)
+@section('meta_keywords', $meta_keywords ?? $fallbackKeywords)
 @section('content')
   <main>
     {{-- @include('frontend.includes.listing-banner') --}}
